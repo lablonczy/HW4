@@ -1,25 +1,7 @@
-<!DOCTYPE HTML ><!--
- /*
- * (C) Copyright Blackboard Inc. 1998-2005 - All Rights Reserved
- *
- * Permission to use, copy, modify, and distribute this software
- * without prior explicit written approval is strictly prohibited.
- * Please refer to the file "copyright.html" for further important
- * copyright and licensing information.
- *
- * BLACKBOARD MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE
- * SUITABILITY OF THE SOFTWARE, EITHER EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-
- * INFRINGEMENT. BLACKBOARD SHALL NOT BE LIABLE FOR ANY DAMAGES
- * SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR
- * DISTRIBUTING THIS SOFTWARE OR ITS DERIVATIVES.
- */
- -->
-
+<!DOCTYPE HTML >
 <html  lang="en-US">
  <head>
-  <title>Begin: Quiz Abstractions, Architectures, Compilers, Language ...</title>
+  <title>Blackboard Learn</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta id="request-method" name="request-method" content="GET">
   <meta name="author" content="Blackboard">
@@ -31,17 +13,608 @@
 
 <script type="text/javascript">(window.NREUM||(NREUM={})).loader_config={licenseKey:"232bf20b67",applicationID:"491465376"};window.NREUM||(NREUM={}),__nr_require=function(e,t,n){function r(n){if(!t[n]){var i=t[n]={exports:{}};e[n][0].call(i.exports,function(t){var i=e[n][1][t];return r(i||t)},i,i.exports)}return t[n].exports}if("function"==typeof __nr_require)return __nr_require;for(var i=0;i<n.length;i++)r(n[i]);return r}({1:[function(e,t,n){function r(){}function i(e,t,n){return function(){return o(e,[u.now()].concat(c(arguments)),t?null:this,n),t?void 0:this}}var o=e("handle"),a=e(6),c=e(7),f=e("ee").get("tracer"),u=e("loader"),s=NREUM;"undefined"==typeof window.newrelic&&(newrelic=s);var d=["setPageViewName","setCustomAttribute","setErrorHandler","finished","addToTrace","inlineHit","addRelease"],p="api-",l=p+"ixn-";a(d,function(e,t){s[t]=i(p+t,!0,"api")}),s.addPageAction=i(p+"addPageAction",!0),s.setCurrentRouteName=i(p+"routeName",!0),t.exports=newrelic,s.interaction=function(){return(new r).get()};var m=r.prototype={createTracer:function(e,t){var n={},r=this,i="function"==typeof t;return o(l+"tracer",[u.now(),e,n],r),function(){if(f.emit((i?"":"no-")+"fn-start",[u.now(),r,i],n),i)try{return t.apply(this,arguments)}catch(e){throw f.emit("fn-err",[arguments,this,e],n),e}finally{f.emit("fn-end",[u.now()],n)}}}};a("actionText,setName,setAttribute,save,ignore,onEnd,getContext,end,get".split(","),function(e,t){m[t]=i(l+t)}),newrelic.noticeError=function(e,t){"string"==typeof e&&(e=new Error(e)),o("err",[e,u.now(),!1,t])}},{}],2:[function(e,t,n){function r(){return c.exists&&performance.now?Math.round(performance.now()):(o=Math.max((new Date).getTime(),o))-a}function i(){return o}var o=(new Date).getTime(),a=o,c=e(8);t.exports=r,t.exports.offset=a,t.exports.getLastTimestamp=i},{}],3:[function(e,t,n){function r(e,t){var n=e.getEntries();n.forEach(function(e){"first-paint"===e.name?d("timing",["fp",Math.floor(e.startTime)]):"first-contentful-paint"===e.name&&d("timing",["fcp",Math.floor(e.startTime)])})}function i(e,t){var n=e.getEntries();n.length>0&&d("lcp",[n[n.length-1]])}function o(e){e.getEntries().forEach(function(e){e.hadRecentInput||d("cls",[e])})}function a(e){if(e instanceof m&&!g){var t=Math.round(e.timeStamp),n={type:e.type};t<=p.now()?n.fid=p.now()-t:t>p.offset&&t<=Date.now()?(t-=p.offset,n.fid=p.now()-t):t=p.now(),g=!0,d("timing",["fi",t,n])}}function c(e){d("pageHide",[p.now(),e])}if(!("init"in NREUM&&"page_view_timing"in NREUM.init&&"enabled"in NREUM.init.page_view_timing&&NREUM.init.page_view_timing.enabled===!1)){var f,u,s,d=e("handle"),p=e("loader"),l=e(5),m=NREUM.o.EV;if("PerformanceObserver"in window&&"function"==typeof window.PerformanceObserver){f=new PerformanceObserver(r);try{f.observe({entryTypes:["paint"]})}catch(v){}u=new PerformanceObserver(i);try{u.observe({entryTypes:["largest-contentful-paint"]})}catch(v){}s=new PerformanceObserver(o);try{s.observe({type:"layout-shift",buffered:!0})}catch(v){}}if("addEventListener"in document){var g=!1,y=["click","keydown","mousedown","pointerdown","touchstart"];y.forEach(function(e){document.addEventListener(e,a,!1)})}l(c)}},{}],4:[function(e,t,n){function r(e,t){if(!i)return!1;if(e!==i)return!1;if(!t)return!0;if(!o)return!1;for(var n=o.split("."),r=t.split("."),a=0;a<r.length;a++)if(r[a]!==n[a])return!1;return!0}var i=null,o=null,a=/Version\/(\S+)\s+Safari/;if(navigator.userAgent){var c=navigator.userAgent,f=c.match(a);f&&c.indexOf("Chrome")===-1&&c.indexOf("Chromium")===-1&&(i="Safari",o=f[1])}t.exports={agent:i,version:o,match:r}},{}],5:[function(e,t,n){function r(e){function t(){e(a&&document[a]?document[a]:document[i]?"hidden":"visible")}"addEventListener"in document&&o&&document.addEventListener(o,t,!1)}t.exports=r;var i,o,a;"undefined"!=typeof document.hidden?(i="hidden",o="visibilitychange",a="visibilityState"):"undefined"!=typeof document.msHidden?(i="msHidden",o="msvisibilitychange"):"undefined"!=typeof document.webkitHidden&&(i="webkitHidden",o="webkitvisibilitychange",a="webkitVisibilityState")},{}],6:[function(e,t,n){function r(e,t){var n=[],r="",o=0;for(r in e)i.call(e,r)&&(n[o]=t(r,e[r]),o+=1);return n}var i=Object.prototype.hasOwnProperty;t.exports=r},{}],7:[function(e,t,n){function r(e,t,n){t||(t=0),"undefined"==typeof n&&(n=e?e.length:0);for(var r=-1,i=n-t||0,o=Array(i<0?0:i);++r<i;)o[r]=e[t+r];return o}t.exports=r},{}],8:[function(e,t,n){t.exports={exists:"undefined"!=typeof window.performance&&window.performance.timing&&"undefined"!=typeof window.performance.timing.navigationStart}},{}],ee:[function(e,t,n){function r(){}function i(e){function t(e){return e&&e instanceof r?e:e?f(e,c,o):o()}function n(n,r,i,o){if(!p.aborted||o){e&&e(n,r,i);for(var a=t(i),c=v(n),f=c.length,u=0;u<f;u++)c[u].apply(a,r);var d=s[w[n]];return d&&d.push([b,n,r,a]),a}}function l(e,t){h[e]=v(e).concat(t)}function m(e,t){var n=h[e];if(n)for(var r=0;r<n.length;r++)n[r]===t&&n.splice(r,1)}function v(e){return h[e]||[]}function g(e){return d[e]=d[e]||i(n)}function y(e,t){u(e,function(e,n){t=t||"feature",w[n]=t,t in s||(s[t]=[])})}var h={},w={},b={on:l,addEventListener:l,removeEventListener:m,emit:n,get:g,listeners:v,context:t,buffer:y,abort:a,aborted:!1};return b}function o(){return new r}function a(){(s.api||s.feature)&&(p.aborted=!0,s=p.backlog={})}var c="nr@context",f=e("gos"),u=e(6),s={},d={},p=t.exports=i();p.backlog=s},{}],gos:[function(e,t,n){function r(e,t,n){if(i.call(e,t))return e[t];var r=n();if(Object.defineProperty&&Object.keys)try{return Object.defineProperty(e,t,{value:r,writable:!0,enumerable:!1}),r}catch(o){}return e[t]=r,r}var i=Object.prototype.hasOwnProperty;t.exports=r},{}],handle:[function(e,t,n){function r(e,t,n,r){i.buffer([e],r),i.emit(e,t,n)}var i=e("ee").get("handle");t.exports=r,r.ee=i},{}],id:[function(e,t,n){function r(e){var t=typeof e;return!e||"object"!==t&&"function"!==t?-1:e===window?0:a(e,o,function(){return i++})}var i=1,o="nr@id",a=e("gos");t.exports=r},{}],loader:[function(e,t,n){function r(){if(!E++){var e=b.info=NREUM.info,t=p.getElementsByTagName("script")[0];if(setTimeout(u.abort,3e4),!(e&&e.licenseKey&&e.applicationID&&t))return u.abort();f(h,function(t,n){e[t]||(e[t]=n)});var n=a();c("mark",["onload",n+b.offset],null,"api"),c("timing",["load",n]);var r=p.createElement("script");r.src="https://"+e.agent,t.parentNode.insertBefore(r,t)}}function i(){"complete"===p.readyState&&o()}function o(){c("mark",["domContent",a()+b.offset],null,"api")}var a=e(2),c=e("handle"),f=e(6),u=e("ee"),s=e(4),d=window,p=d.document,l="addEventListener",m="attachEvent",v=d.XMLHttpRequest,g=v&&v.prototype;NREUM.o={ST:setTimeout,SI:d.setImmediate,CT:clearTimeout,XHR:v,REQ:d.Request,EV:d.Event,PR:d.Promise,MO:d.MutationObserver};var y=""+location,h={beacon:"bam.nr-data.net",errorBeacon:"bam.nr-data.net",agent:"js-agent.newrelic.com/nr-1184.min.js"},w=v&&g&&g[l]&&!/CriOS/.test(navigator.userAgent),b=t.exports={offset:a.getLastTimestamp(),now:a,origin:y,features:{},xhrWrappable:w,userAgent:s};e(1),e(3),p[l]?(p[l]("DOMContentLoaded",o,!1),d[l]("load",r,!1)):(p[m]("onreadystatechange",i),d[m]("onload",r)),c("mark",["firstbyte",a.getLastTimestamp()],null,"api");var E=0},{}],"wrap-function":[function(e,t,n){function r(e){return!(e&&e instanceof Function&&e.apply&&!e[a])}var i=e("ee"),o=e(7),a="nr@original",c=Object.prototype.hasOwnProperty,f=!1;t.exports=function(e,t){function n(e,t,n,i){function nrWrapper(){var r,a,c,f;try{a=this,r=o(arguments),c="function"==typeof n?n(r,a):n||{}}catch(u){p([u,"",[r,a,i],c])}s(t+"start",[r,a,i],c);try{return f=e.apply(a,r)}catch(d){throw s(t+"err",[r,a,d],c),d}finally{s(t+"end",[r,a,f],c)}}return r(e)?e:(t||(t=""),nrWrapper[a]=e,d(e,nrWrapper),nrWrapper)}function u(e,t,i,o){i||(i="");var a,c,f,u="-"===i.charAt(0);for(f=0;f<t.length;f++)c=t[f],a=e[c],r(a)||(e[c]=n(a,u?c+i:i,o,c))}function s(n,r,i){if(!f||t){var o=f;f=!0;try{e.emit(n,r,i,t)}catch(a){p([a,n,r,i])}f=o}}function d(e,t){if(Object.defineProperty&&Object.keys)try{var n=Object.keys(e);return n.forEach(function(n){Object.defineProperty(t,n,{get:function(){return e[n]},set:function(t){return e[n]=t,t}})}),t}catch(r){p([r])}for(var i in e)c.call(e,i)&&(t[i]=e[i]);return t}function p(t){try{e.emit("internal-error",t)}catch(n){}}return e||(e=i),n.inPlace=u,n.flag=a,n}},{}]},{},["loader"]);</script>
   <link rel="SHORTCUT ICON" type="image/x-icon" href="/ui/bb-icon3.ico">
-     <link rel="stylesheet" type="text/css" href="/common/shared.css?v=3900.2.0-rel.27+70f5845" id="css_0">
-     <link rel="stylesheet" type="text/css" href="/themes/as_2015/theme.css?v=3900.2.0-rel.27+70f5845" id="css_1">
-     <link rel="stylesheet" type="text/css" href="/themes/as_2015/app_nav.css?v=3900.2.0-rel.27+70f5845" id="css_2">
-     <link rel="stylesheet" type="text/css" href="/webapps/assessment/css/assessment.css?v=3900.2.0-rel.27+70f5845_3900.2.0-rel.27+70f5845" id="css_3">
-     <link rel="stylesheet" type="text/css" href="/webapps/assessment/css/as_2015/assessment.css?v=3900.2.0-rel.27+70f5845_3900.2.0-rel.27+70f5845" id="css_4">
-     <link rel="stylesheet" type="text/css" href="/webapps/vtbe-tinymce/css/prism/prism.css?v=3900.2.0-rel.27+70f5845" id="css_5">
-     <link rel="stylesheet" type="text/css" href="/webapps/videointegration/css/video-integration.css?v=3900.2.0-rel.27+70f5845_3900.2.0-rel.27+70f5845" id="css_6">
-     <link rel="stylesheet" type="text/css" href="/webapps/allyintegration/css/ally-integration.css?v=3900.2.0-rel.27+70f5845_3900.2.0-rel.27+70f5845" id="css_7">
+     <link rel="stylesheet" type="text/css" href="/ui-ultra/css/ultra.css?v=3900.2.0-rel.31+0a50fe3" id="css_0">
+     <link rel="stylesheet" type="text/css" href="/webapps/vtbe-tinymce/css/prism/prism.css?v=3900.2.0-rel.31+0a50fe3" id="css_1">
+     <link rel="stylesheet" type="text/css" href="/webapps/videointegration/css/video-integration.css?v=3900.2.0-rel.31+0a50fe3_3900.2.0-rel.31+0a50fe3" id="css_2">
+     <link rel="stylesheet" type="text/css" href="/webapps/allyintegration/css/ally-integration.css?v=3900.2.0-rel.31+0a50fe3_3900.2.0-rel.31+0a50fe3" id="css_3">
+          <style type="text/css">
+h1, h2, h3, h4{
+  font-family: 'Oswald', sans-serif;
+}
+h1 {
+    text-transform: uppercase;
+}
+html {
+    height: 100%;
+}
 
-       <link rel="stylesheet" type="text/css" media="print" href="/ui/styles/print.css?v=3900.2.0-rel.27+70f5845">
-    <script type="text/javascript" src="/javascript/i18n.js?v=3900.2.0-rel.27+70f5845"></script>
+.bannertopimg {
+    margin-bottom: 3em;
+    border-top: 20px solid #73000a;
+}
+.row {
+    width: 100%;
+    max-width: 100%;
+}
+.small-12.small-centered.text-center.columns.footerblock {
+    width: 100%;
+    max-width: 100%;
+}
+#loginHeader {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background-color: #d81b21;
+    width: 100%;
+}
+body#learn-oe-body {
+    background-color: white;
+    position: relative;
+    min-height: 100%;
+    height: auto;
+}
+
+div#bodyContent {
+    width: 100%;
+    max-width: 100%;
+}
+.login-form-footer.row.collapse a {
+    text-decoration: underline;
+}
+div#ultraCourseCatalogLink a {
+    text-decoration: none !important;
+}
+.Coursecataloguespace {
+    display: none;
+}
+div.loginBody {
+    background-position: center 25%;
+    width:90%;
+}
+input#entry-login {
+    width: 100%;
+    min-width: 100% !important;
+    max-width: 100%;
+    display: block;
+}
+ul#loginFormList {
+    width:100%;
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
+}
+input#entry-login {
+    background-color: #73000a;
+    border: 0;
+    border-radius: 5px;
+    color: white;
+    padding: 1em 0;
+}
+.forgot a {
+    border-bottom: 1px solid #c76dd5;
+    color: #c76dd5;
+    margin-bottom: 10px;
+}
+#loginOptions ul li a, #loginOptions ul li.subOption a {
+    color: white !important;
+}
+.login-page #copyright .newCopyright {
+     width: 100%;
+    padding: 1em;
+    background: #E8E3DB;
+    bottom: -20px;
+    border-bottom: 10px solid #d81b21;
+}
+.login-page #copyright{
+    width:100%;
+}
+.additionalInfo p:first-child a {
+    border-bottom: 1px solid;
+    padding-right: 0;
+}
+#loginBox input[type="text"], #loginBox input[type="password"], #loginRedirectProviders button {
+    -moz-border-radius: 5px 5px 5px 5px;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+    background: white;
+    padding: 6px;
+    border: 0px solid #777;
+    color: #666;
+    margin: 0;
+    box-sizing: border-box;
+}
+#loginBox li label, .portlet #loginBoxFull li label {
+    color: white;
+    display: block;
+    font-size: 120%;
+    letter-spacing: 1px;
+    padding: 0 0 3px;
+    text-align: left;
+    text-transform: uppercase;
+    width: 100%;
+    font-weight: 200;
+    margin-bottom: 0.5em;
+    margin-top: 0.8em;
+}
+#loginPageContainer{
+  width:100%;
+  position:absolute;
+
+}
+a, .portlet .subCategories li a, .blockGroups .itemHead, .blockGroups .itemHeadOpen {
+    color: #d81b21;
+}
+
+.bbResources, .systemAnnouncementsLogin, div#login-form {
+    width: 31%;
+}
+.systemAnnouncementsLogin {
+    margin: 0 2% 4% 2%;
+    width: 33%;
+    padding: 2% 3%;
+    border-right: 1px solid #e9e9e9;
+    border-left: 1px solid #e9e9e9;
+}
+.bb-login #gatewayButtons .inline-list {
+    float: right;
+    display: inline-block;
+}
+.bbResources, .systemAnnouncementsLogin, div#login-form {
+    display: inline-block;
+    vertical-align: top;
+    padding: 2%;
+    min-height: 400px;
+}
+
+#loginBox form li+li+li {
+  margin-top:2em;
+    width: 100%;
+}
+.systemAnnouncementsLogin h1, .systemAnnouncementsLogin p {
+    color: black;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+div#login-form h1 {
+    font-weight: bold !important;
+    margin-top: 0;
+    color: #73000a;
+    text-align: center;
+    text-transform: uppercase;
+    line-height: 1;
+}
+.systemAnnouncementsLogin h1 {
+    color: #73000a;
+    font-weight: bold !important;
+    line-height: 1;
+}
+.bbResources h1 {
+    font-weight: bold !important;
+    color: #73000a;
+    line-height: 1;
+}
+.blockBTNlogin p {
+    color: black;
+    text-align: center;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+.loginBTN {
+    text-align: center;
+    padding: 0.5em 1em;
+    border-radius: 5px;
+    background-color: #995ca5;
+}
+.loginBTN a {
+    color: white;
+}
+.blockBTNlogin {
+    border-top: 1px solid lightgray;
+    padding: 0.8em 0;
+}
+img.btnblocks {
+    margin-right: 2em;
+}
+div#loginBox img {
+    width: 100%;
+}
+div.loginBody {
+    padding:190px 0 0;
+    background: none;
+}
+p.hashtag {
+    font-size: 30px;
+    color: #985ca5;
+    font-weight: bold;
+}
+.systemAnnouncementsLogin ul li {
+    color: white;
+    text-align: center;
+    margin-bottom: 0px;
+    font-size:13px;
+}
+.systemAnnouncementsLogin ul li b {
+    font-size: 20px;
+    margin: 0px 5px;
+}
+
+.bb-login .new-logo.customized-logo img {
+    max-width: 300px;
+    width: 100%;
+    height: auto;
+    border-radius: 0;
+}
+.bb-login .new-logo{
+    margin-top:0;
+}
+.bb-login #login-block {
+    background: white;
+    margin-top: 0;
+    padding:0;
+    min-width: 15rem;
+    max-width: 90%;
+    margin-bottom: 0;
+}
+.systemAnnouncementsLogin h1, .bbResources h1 {
+    font-family: "Open Sans",sans-serif;
+    font-size: 22px;
+    font-weight: bold;
+}
+.systemAnnouncementsLogin ul {
+    list-style: none;
+    margin-left: 0;
+    margin-bottom: 0;
+  margin-left: 0;
+}
+.systemAnnouncementsLogin p {
+    font-size: 14px;
+}
+
+.bb-login .login-form .button {
+    background-color: transparent;
+    box-shadow: 0 0 0 0px #fff inset;
+    margin-top: 0rem;
+    margin-bottom: .3125rem;
+}
+
+
+.footerblock {
+    width: 90% !important;
+    padding: 1em !important;
+    background: #000000;
+    border-bottom: 0px solid #007396;
+    margin: 0em 5% 0 5% !important;
+    display: block;
+}
+.newCopyright .logo {
+    display: none;
+}
+.additionalInfo p {
+    margin-bottom: 0;
+}
+.additionalInfo p a {
+    color: white;
+}
+.legal {
+    color: white;
+}
+div#gatewayButtons ul {
+    margin-bottom: 0;
+}
+i#help-link a {
+    color: #995ca5;
+}
+.bb-login #copyright {
+    font-size: .75rem;
+    color: black;
+    margin-top: 0;
+}
+div#login-form h1.login-logo.new-logo.customized-logo, .systemAnnouncementsLogin h1.welcome {
+    display: none;
+}
+h1.welcome {
+    font-family: "Open Sans",sans-serif;
+    font-size: 22px;
+    font-weight: bold;
+    color: white;
+}
+.systemAnnouncementsLogin img {
+    max-width: 50px;
+    margin-right: 10px;
+}
+.systemAnnouncementsLogin .blockBTNlogin p a {
+    color: #73000a;
+    font-weight: 700;
+}
+.systemAnnouncementsLogin h1.login-logo.new-logo.customized-logo {
+    margin-bottom: 0;
+}
+.trial-registration {
+    margin-top: 0.5em;
+}
+img.monumentLogo {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 2em;
+    margin-top: 2em;
+}
+#login-form img.monumentLogo{
+  display:none;
+}
+a.appimg img {
+    width: 28%;
+    margin: 0 2% !important;
+}
+input#user_id {
+    margin-bottom: 0;
+}
+div#ultraCourseCatalogLink a {
+    color: black !important;
+    background-color: transparent;
+    width: 100%;
+    display: block;
+    padding: 1em;
+    border: 1px solid;
+}
+div#ultraCourseCatalogLink {
+    margin-top: 15px !important;
+}
+.small-12.small-centered.text-center.columns {
+    padding: 0;
+}
+.login-form-footer.row.collapse .small-6 {
+    width: 100%;
+    text-align: center !important;
+}
+.round-border {
+      border: 1px solid #eee;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      -webkit-border-radius: 4px;
+      -moz-border-radius: 4px;
+      border-radius: 4px;
+      padding: 10px;
+      margin-bottom: 5px;
+    }
+div#collapse1{
+    margin-top:-11px;
+    margin-left: -11px;
+    background-color:white;
+    z-index: 9999999;
+    position: absolute;
+    width: 100%;
+}
+.buttoncolapsed{
+position: absolute;
+    z-index: 9999999999;
+    margin: 20px 35%;
+    left: 0;
+    right: 0;
+    width: 30%;
+}
+button.nav-toggle {
+    background-color: #733F6F;
+    width: 100%;
+    color: white;
+    border-radius: 5px;
+    box-shadow: inset 0 0 0 0 #333;
+    font-size: 22px;
+}
+.accessblock{
+  margin: 0 0 4% 2% !important;
+}
+div#copyright, #loginOptions {
+    width: 50%;
+    margin: 0 25%;
+    vertical-align: top;
+    display: inline-block;
+    text-align: center;
+}
+div#loginOptions {
+    display: none;
+}
+.bb-login #gatewayButtons{
+    margin-bottom: 0 !important;
+}
+.login-form-footer {
+    margin-top: 2.5em !important;
+}
+.bb-login .login-form #loginRedirectProviders .button.dropdown {
+    background-color: transparent;
+    box-shadow: none;
+    color: #fff;
+    font-family: "Open Sans";
+    font-size: .8rem;
+    margin-bottom: .375rem;
+    margin-top: 1.8em;
+    padding: 0.8em 1.5em;
+    text-align: left;
+    border: 1px solid white;
+    border-radius: 0;
+}
+.login-form-footer {
+    margin-top: 1em !important;
+}
+.bb-login .login-form-footer{
+  padding-top:0;
+}
+div#pagefooter {
+    bottom: 0;
+}
+.bb-login .login-form ul input[type='text']:focus, .bb-login .login-form ul input[type='password']:focus {
+    box-shadow: none;
+    border-bottom-color: #c56fd5 !important;
+}
+.bb-login .login-form ul label {
+    color: black;
+    }
+    .systemAnnouncementsLogin h1 {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+ /*---------Login Block-----------*/
+
+.bb-login .login-form ul input[type='text'], .bb-login .login-form ul input[type='password'] {
+    background-color: transparent;
+    border: none;
+    color: #000;
+    border-bottom: 2px solid #73000a;
+    margin: 1.25rem 0;
+    font-size: .875rem;
+    outline-offset: -.125rem;
+}
+.trial-registration a {
+    color: #73000a;
+}
+.buttonLogin {
+    margin-top: 2em;
+    background-color: #73000a;
+    border: 0;
+    border-radius: 5px;
+    color: white;
+    padding: 1em 0;
+    width: 100%;
+    min-width: 100% !important;
+    max-width: 100%;
+    display: block;
+}
+a.buttonLogin:hover {
+    color: white;
+}
+div#loginFormFields {
+    display: none;
+}
+/*-----------Announcements-----------*/
+div#loginAnnouncements ul li {
+    color:white;
+    border-bottom: 1px solid #cdcdcd;
+    background-color:transparent !important;
+    width: 100%;
+    display: inline-block !important;
+    padding: 1em !important;
+    margin: 1%;
+}
+
+div#loginAnnouncements ul li:first-child {
+    margin-left: 0;
+}
+div#loginAnnouncements ul li:nth-child(3n) {
+    margin-right: 0;
+}
+div#loginAnnouncements {
+    background: #73000a;
+    width: 100%;
+    max-width: 100% !important;
+    padding: 0 2em;
+}
+.bb-login .login-page-announcements{
+      margin-bottom: 0em;
+      margin-top:0;
+}
+
+.bb-login .login-form-footer a {
+    color: black;
+}
+.bb-login .login-form ul li {
+    margin: 0 0 15px 0;
+}
+.vtbegenerated p {
+    background-color: transparent !important;
+    color: white !important;
+}
+.bb-login .login-form ul label.float-above {
+    color: black;
+    transform: translate(0, 0) scale(0.85);
+}
+.bb-login .login-page-announcements #loginAnnouncements {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+@media (max-width: 800px){
+  /*-----------Announcements-----------*/
+div#loginAnnouncements ul li {
+    width: 100%;
+    display: inline-block !important;
+    padding: 1em !important;
+    margin: 0%;
+}
+
+div#loginAnnouncements ul li:first-child {
+    margin-left: 0;
+}
+div#loginAnnouncements ul li:nth-child(3n) {
+    margin-right: 0;
+}
+div#loginAnnouncements {
+    width: 100%;
+    padding: 0 2em;
+}
+
+.systemAnnouncementsLogin .Coursecataloguespace {
+    display: block;
+}
+.bbResources, .systemAnnouncementsLogin, div#login-form{
+    width:100%;
+    padding: 10%;
+    min-height:auto !important;
+    margin-top:2em;
+}
+
+.bb-login .new-logo.customized-logo img {
+    max-width: 400px;
+}
+div#login-form h1.welcome, .systemAnnouncementsLogin img {
+    display:none;
+  }
+div#login-form h1.login-logo.new-logo.customized-logo, .systemAnnouncementsLogin h1.welcome {
+    display: block;
+}
+.systemAnnouncementsLogin{
+  margin: 2em 0;
+}
+#login-form img.monumentLogo {
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+}
+.systemAnnouncementsLogin {
+    border-top: 1px solid #e9e9e9;
+    border-bottom: 1px solid #e9e9e9;
+    border-left: 0px solid #e9e9e9;
+    border-right: 0px solid #e9e9e9;
+
+}
+}
+
+@media (max-width: 420px){
+
+  #login-form img.monumentLogo{
+  display:block;
+  margin:0 auto;
+}
+.bbResources, .systemAnnouncementsLogin{
+    width:100%;
+    padding: 10%;
+}
+div#loginBox {
+    width: 81%;
+}
+.systemAnnouncementsLogin {
+    margin: 20px 0;
+}
+video {
+    position: fixed;
+    top: 79%
+}
+.systemAnnouncementsLogin {
+    margin: 2em 0;
+}
+}
+</style>
+
+       <link rel="stylesheet" type="text/css" media="print" href="/ui/styles/print.css?v=3900.2.0-rel.31+0a50fe3">
+    <script type="text/javascript" src="/javascript/i18n.js?v=3900.2.0-rel.31+0a50fe3"></script>
       <script language='javascript' type='text/javascript'>
 
 var JS_RESOURCES = new Object();
@@ -267,404 +840,422 @@ _init_bundle_LOCALE_SETTINGS();
 </script>
 
          <script type="text/javascript" src="/javascript/cdn.js"></script>
-    <script type="text/javascript" src="/groupjs/3C3F5748629380653923832C21455046.js?v=3900.2.0-rel.27+70f5845"></script>
-    <script type="text/javascript" src="/webapps/assessment/dwr_open/interface/UserDataDWRFacade.js?v=3900.2.0-rel.27+70f5845_3900.2.0-rel.27+70f5845"></script>
-    <script type="text/javascript" src="/webapps/assessment/dwr_open/interface/MashupDWRFacade.js?v=3900.2.0-rel.27+70f5845_3900.2.0-rel.27+70f5845"></script>
-    <script type="text/javascript" src="/javascript/titlebartagutils.js?v=3900.2.0-rel.27+70f5845"></script>
-    <script type="text/javascript" src="/webapps/assessment/dwr_open/engine.js?v=3900.2.0-rel.27+70f5845_3900.2.0-rel.27+70f5845"></script>
-    <script type="text/javascript" src="/webapps/assessment/dwr/interface/AssessmentDWRFacade.js?v=3900.2.0-rel.27+70f5845_3900.2.0-rel.27+70f5845"></script>
-    <script type="text/javascript" src="/groupjs/2AE28268EC8C3F3F07604073E82EE3E0.js?v=3900.2.0-rel.27+70f5845"></script>
-    <script type="text/javascript" src="/javascript/ngui/widget.js?v=3900.2.0-rel.27+70f5845"></script>
-    <script type="text/javascript" src="/webapps/assessment/dwr_open/interface/CourseMenuDWRFacade.js?v=3900.2.0-rel.27+70f5845_3900.2.0-rel.27+70f5845"></script>
-    <script type="text/javascript" src="/webapps/assessment/dwr_open/interface/UserPageInstructionsSettingDWRFacade.js?v=3900.2.0-rel.27+70f5845_3900.2.0-rel.27+70f5845"></script>
-    <script type="text/javascript" src="/javascript/dwr/engine.js?v=3900.2.0-rel.27+70f5845"></script>
-    <script type="text/javascript" src="/javascript/ngui/breadcrumbs.js?v=3900.2.0-rel.27+70f5845"></script>
-    <script type="text/javascript" src="/javascript/ngui/tree.js?v=3900.2.0-rel.27+70f5845"></script>
-    <script type="text/javascript" src="/javascript/ngui/coursemenu.js?v=3900.2.0-rel.27+70f5845"></script>
-    <script type="text/javascript" src="/javascript/dwr/util.js?v=3900.2.0-rel.27+70f5845"></script>
-    <script type="text/javascript" src="/groupjs/B8B8E61EA397105FDDC3AA2D0CADF322.js?v=3900.2.0-rel.27+70f5845"></script>
-    <script type="text/javascript" src="/webapps/assessment/dwr_open/interface/UserDWRFacade.js?v=3900.2.0-rel.27+70f5845_3900.2.0-rel.27+70f5845"></script>
+    <script type="text/javascript" src="/groupjs/ECC58BBBF2F26B00C65D39B5CD48B1E3.js?v=3900.2.0-rel.31+0a50fe3"></script>
+    <script type="text/javascript" src="/webapps/login/dwr_open/interface/UserDataDWRFacade.js?v=3900.2.0-rel.31+0a50fe3"></script>
+    <script type="text/javascript" src="/webapps/login/dwr_open/interface/MashupDWRFacade.js?v=3900.2.0-rel.31+0a50fe3"></script>
+    <script type="text/javascript" src="/ui-ultra/js/hide-focus-outline.js?v=3900.2.0-rel.31+0a50fe3"></script>
+    <script type="text/javascript" src="/ui-ultra/js/login-page.js?v=3900.2.0-rel.31+0a50fe3"></script>
+    <script type="text/javascript" src="/groupjs/49B084FD56D9B84900FFBB2A6F44F807.js?v=3900.2.0-rel.31+0a50fe3"></script>
+    <script type="text/javascript" src="/webapps/privacy-disclosure/js/cookieConsent.js?v=3900.2.0-rel.31+0a50fe3_3900.2.0-rel.31+0a50fe3"></script>
+    <script type="text/javascript" src="/groupjs/B5631FBAA01777B48390AF76D4738746.js?v=3900.2.0-rel.31+0a50fe3"></script>
     </head>
-  <body id="learn-oe-body" >
+  <body id="learn-oe-body" class='bb-login hide-focus-outline'>
 
-<div class=quickLinksOnly><h1 class="hideoff hideFromQuickLinks">Open Quick Links</h1><div id=quick_links_wrap><a id=quick_links_lightbox_link href="#" onclick="quickLinks.lightboxHelper.toggleLightbox(); return false;" role=button aria-haspopup=true tabindex=1 title="Open&#x20;Quick&#x20;Links">Quick Links</a></div><div id=quickLinksLightboxDiv class=hideoff aria-hidden=true style="display:none"><div class=ax-content><div class=content-lite><div id=quick_links_landmarks_section><h2 class=hideFromQuickLinks>Page Landmarks</h2><ul class=shortcut-list id=quick_links_landmark_list></ul></div><div id=quick_links_headings_section><h2 class=hideFromQuickLinks>Content Outline</h2><ul class=shortcut-list id=quick_links_heading_list></ul></div></div><div id=quick_links_hotkeys_section class=legend><h2 class=hideFromQuickLinks>Keyboard Shortcuts</h2><ul class=keycombos id=quick_links_hotkey_list></ul></div></div></div></div>
-<div id="globalNavPageContentArea">
+  <div id="loginLang" class="clearfix">
 
-<h2 class="hideoff">
- Current Location
-</h2>
+  <form action="/webapps/portal/execute/changeLocale" method="post" name="locale_picker" target="_top">
 
-<div id="breadcrumbs" class="breadcrumbs clearfix ">
- <div class="breadcrumb-controls clearfix" id="breadcrumb_controls_id">
+  <INPUT TYPE="hidden" NAME="target" value="/webapps/login/?action=login">
 
 
 
-
-
-<div id="helpTextToggle" class="helpLink hidden">
-  <a href="#" id="helpTextToggleLink" class="browseIcon">
-	<img id="helpTextToggleImg" src="/images-ltr/ci/ng/small_help_on2.gif" alt="Turn help text off and on"/></a>
-</div>
- <input type='hidden' name='showHelperSetting' id='showHelperSetting' value=''>
- </div>
-
- <div class="path  noToggle" role="navigation">
- <ol class="clearfix">
-    	<li
-    class="root"
-		    > <a href="/webapps/blackboard/execute/courseMain?course_id=_1116675_1"  title="Programming Lang Structures CSCE330-003-FALL-2020">        <span id="crumb_1">
-                      <span class="courseName">Programming Lang Structures</span> <span class="courseId">CSCE330-003-FALL-2020</span>
-                  </span>
-      </a>          </li>
-   	<li
-        > <a href="/webapps/blackboard/content/listContent.jsp?course_id=_1116675_1&content_id=_14830633_1&mode=reset"  title="Assignments">        <span id="crumb_2">
-                      Assignments
-                  </span>
-      </a>          </li>
-   	<li
-    class="placeholder"        >         <span id="crumb_3">
-                      Begin: Quiz Abstractions, Architectures, Compilers, Language Families
-                  </span>
-                </li>
-  </ol>
- </div>
-
+  </form>
 </div>
 
-<div class="locationPane">
- <nav role="navigation" aria-label="Course Menu" id="navigationPane" class="navigationPane ">
+  <div class="row" id="bodyContent">
+  	<div id="login-block" class="accesibilitylogin small-11 small-centered medium-12 medium-centered text-center columns">
+  		<div class="bannertopimg"><img src="https://temas.s3.amazonaws.com/Blackboard/University%20of%20South%20Carolina/backgroundImage.png" width="100%"></div>
+  		<div id="login-form" class="login-form loginBox">
+         <h1 class="welcome">Log in to Blackboard</h1>
+         <a class="buttonLogin" href="https://cas.auth.sc.edu/cas/login?service=https%3A%2F%2Fblackboard.sc.edu%2Fwebapps%2Fbb-auth-provider-cas-BB5dd6acf5e22a7%2Fexecute%2FcasLogin%3Fcmd%3Dlogin%26authProviderId%3D_132_1%26redirectUrl%3Dhttps%253A%252F%252Fblackboard.sc.edu%252Fultra%26globalLogoutEnabled%3Dtrue" target="_blank">LOGIN</a>
+         <div class="logo align-self-center">
 
- <div id="menuWrap" class="menuWrap" >
-  <div id="puller" >
-  <a id="menuPuller" class="clickpuller" title="Hide Course Menu" href="#">
-   <img id="expander" alt="Hide Course Menu" src="/images/spacer.gif"/>
-  </a>
- </div>
-<div class="menuWrap-inner">
-  <div id="courseMenuPalette" class="navPalette listCm navPaletteExpCol"><div class="actionBarMicro clearfix"><h2 class="hideoff">Menu Management Options</h2><ul id="courseMenuPalette_actionbar" class="nav clearfix u_floatThis-left"></ul><ul class="nav clearfix u_floatThis-right"><li id="refreshMenuLink" class="secondaryButton "><a href="#" title="Refresh"><span><img src="/images/ci/ng/small_refresh.gif" alt="Refresh"></span></a></li><li id="courseMapButton" class="secondaryButton "><a href="#" title="Display Course Menu in a Window"><span><img src="/images/ci/ng/small_new_window.gif" alt="Display Course Menu in a Window"></span></a></li></ul></div><div class="navPaletteContent"><h2 class="hideoff" tabindex="-1">Course Menu:</h2><div id="courseMenuPalette_paletteTitleHeading"><div class="navPaletteTitle"><h3><a href="#" role="button" aria-expanded="true" class="comboLink" aria-controls="courseMenuPalette_contents" title="Collapse Programming Lang Structures (CSCE330-003-FALL-2020)" id="courseMenu_link">Programming Lang Structures (CSCE330-003-FALL-2020)</a></h3><h3><a href="/webapps/blackboard/execute/courseMain?course_id=_1116675_1" target="" class="submenuLink" id="courseMenu_combo" title="Go to Course Entry Page"><img src="/images/ci/icons/generic_dbl_arrow_right.gif" alt="Course Entry Page"></a></h3></div></div><ul id="courseMenuPalette_contents" class="courseMenu"><li id="paletteItem:_7721266_1" class="clearfix "><a href="/webapps/blackboard/content/launchLink.jsp?course_id=_1116675_1&toc_id=_7721266_1&mode=view&mode=reset" target="_self"><span title="Home Page">Home Page</span></a></li><li id="paletteItem:_7721261_1" class="clearfix "><a href="/webapps/blackboard/content/listContent.jsp?course_id=_1116675_1&content_id=_14830632_1&mode=reset" target="_self"><span title="Course Content">Course Content</span></a></li><li id="paletteItem:_7721265_1" class="clearfix "><a href="/webapps/blackboard/content/listContent.jsp?course_id=_1116675_1&content_id=_14830633_1&mode=reset" target="_self"><span title="Assignments">Assignments</span></a></li><li id="paletteItem:_7721262_1" class="clearfix "><a href="/webapps/blackboard/content/launchLink.jsp?course_id=_1116675_1&tool_id=_137_1&tool_type=TOOL&mode=view&mode=reset" target="_self"><span title="Discussions">Discussions</span></a></li><li id="paletteItem:_7721263_1" class="clearfix "><a href="/webapps/blackboard/content/launchLink.jsp?course_id=_1116675_1&tool_id=_136_1&tool_type=TOOL&mode=view&mode=reset" target="_self"><span title="Groups">Groups</span></a></li><li id="paletteItem:_7721260_1" class="clearfix "><a href="/webapps/blackboard/content/launchLink.jsp?course_id=_1116675_1&tool_id=_4296_1&tool_type=TOOL&mode=view&mode=reset" target="_self"><span title="Blackboard Collaborate Ultra">Blackboard Collaborate Ultra</span></a></li><li id="paletteItem:_7721264_1" class="clearfix "><a href="/webapps/blackboard/content/launchLink.jsp?course_id=_1116675_1&tool_id=_11_1&tool_type=TOOL&mode=view&mode=reset" target="_self"><span title="Tools">Tools</span></a></li><li id="paletteItem:_7936294_1" class="clearfix "><a href="/webapps/blackboard/content/launchLink.jsp?course_id=_1116675_1&tool_id=_5011_1&tool_type=TOOL&mode=view&mode=reset" target="_self"><span title="My Course Evaluations">My Course Evaluations</span></a></li></ul></div></div>
-  </div>
- </div>
- </nav>
- <div role="main" id="contentPanel" class="contentPane  ">
-<div class="shadow">
-       <div id="editmodeWrapper">
-
-  <div id="content" class="contentBox ">
-
-<div id="pageTitleDiv" class="pageTitle clearfix ">
-
-
-<div id="pageTitleBar" class='pageTitleIcon' tabindex="0">
-    <img src="/images/ci/sets/set12/test_on.svg" alt="" id="titleicon"><h1 id="pageTitleHeader" tabindex="-1" ><span id="pageTitleText">
-  Begin: Quiz Abstractions, Architectures, Compilers, Language Families  </span></h1>
-        <span id="_titlebarExtraContent" class="titleButtons"></span>
+<h1 class="login-logo new-logo customized-logo" >
+    <span>Blackboard Learn &#8482;</span>
+    <img src="/branding/_1_1/loginLogo/CustomLoginLogo.png?m=k5wllnlm" alt="" />
+</h1>
 </div>
 
 
 
-</div>
 
-      <div class="container clearfix" id="containerdiv">
-    <h2 class="hideoff">Content</h2>
-    <script language='javascript' type='text/javascript'>var eesy_course_id=1116675; var_eesy_inactive_roles=[];</script><div id='eesy_realurl' style='display: none;'>https%3A%2F%2Fblackboard.sc.edu%2Fwebapps%2Fassessment%2Ftake%2FlaunchAssessment.jsp%3Fcontent_id%3D_15032530_1%26course_id%3D_1116675_1%26group_id%3D%26mode%3Dview</div><script type='text/javascript'>  (function() {    function async_load(){        var s = document.createElement('script');        s.type = 'text/javascript';        s.async = true;        s.src = '/webapps/ee-Eesypluginv2-bb_bb60/loader2.jsp';        var x = document.getElementsByTagName('script')[0];        x.parentNode.insertBefore(s, x);    }    if (window.attachEvent)        window.attachEvent('onload', async_load);    else        window.addEventListener('load', async_load, false); })(); </script><script type="text/javascript" src="/webapps/achievements/js/achievement.js"></script><script src="/javascript/scriptaculous/version_pinned_scriptaculous.js"></script><link rel="stylesheet" href="/webapps/achievements/css/achievements.css" type="text/css" media="screen" /><script type="text/javascript">
-new Ajax.Request('/webapps/achievements/checkAchievements.form', {
-method:'get',
-asynchronous:true,
-parameters: {courseId: '_1116675_1', type: 1 },
-onSuccess: function(response) {
-var jsonArray = response.responseJSON;
-handleAchievements(jsonArray);
-},
-onFailure: function() { alert('Something went wrong...'); }
-});
-</script><script type="text/javascript">
-window.document.assessmentBegun = false;
-function checkAlreadySubmitted(msg) {
-	if(window.document.assessmentBegun == true) {
-		alert(msg);
-		return false;
-	}
-	window.document.assessmentBegun = true;
-	return true;
+<noscript>
+  <div class="receipt bad editmode alert-box alert">Please enable JavaScript in your browser for the Blackboard application to function.</div>
+</noscript>
+
+<form action="/webapps/login/" onsubmit="return validate_form( this, false, true );" method="POST" name="login" >
+
+
+<script type="text/javascript">
+ function login_openForgotPassword( url )
+ {
+   var passwordWin = window.open( url, 'forgotPasswordWindow', 'menubar=1,resizable=1,scrollbars=1,status=1,width=850,height=480' );
+   passwordWin.focus();
  }
 
-function clickOnBegin(){
-	if(checkAlreadySubmitted('The requested action is being processed. Wait for confirmation.'))
-		document.location = '/webapps/assessment/take/launch.jsp?course_assessment_id=_680217_1&course_id=_1116675_1&content_id=_15032530_1&step=null';
-}
-function closeWindowOnCancel( newWindow, cancelUrl ){
-  if ( "true" === newWindow && window.opener )
+  FastInit.addOnLoad(function()
+ {
+
+  if( typeof ClientCache !== 'undefined' )
   {
-    window.close();
+    ClientCache.clear();
   }
-  else
+      var startingJSessionCookie = getCookie("JSESSIONID");
+  var guestLocaleCookie = getCookie("guest.session.locale");
+      deleteCookie("JSESSIONID", "/@@", null, true);
+      deleteCookie("JSESSIONID", "/courses", null, true);
+      deleteCookie("JSESSIONID", "/sessions", null, true);
+      deleteCookie("JSESSIONID", "/systemdata", null, true);
+      deleteCookie("JSESSIONID", "/images", null, true);
+      deleteCookie("JSESSIONID", "/images-ltr", null, true);
+      deleteCookie("JSESSIONID", "/images-rtl", null, true);
+      deleteCookie("JSESSIONID", "/reportbranding", null, true);
+      deleteCookie("JSESSIONID", "/reports", null, true);
+      deleteCookie("JSESSIONID", "/modules", null, true);
+      deleteCookie("JSESSIONID", "/groupjs", null, true);
+      deleteCookie("JSESSIONID", "/branding", null, true);
+      deleteCookie("JSESSIONID", "/queue_tasks", null, true);
+      deleteCookie("JSESSIONID", "/sponsors", null, true);
+      deleteCookie("JSESSIONID", "/course_image_main_images", null, true);
+      deleteCookie("JSESSIONID", "/course_image_2_images", null, true);
+      deleteCookie("JSESSIONID", "/course_image_nav_images", null, true);
+      deleteCookie("JSESSIONID", "/org_image_main_images", null, true);
+      deleteCookie("JSESSIONID", "/org_image_2_images", null, true);
+      deleteCookie("JSESSIONID", "/org_image_nav_images", null, true);
+      deleteCookie("JSESSIONID", "/avatar", null, true);
+      deleteCookie("JSESSIONID", "/bannerthumbnail", null, true);
+      deleteCookie("JSESSIONID", "/deployment", null, true);
+      deleteCookie("JSESSIONID", "/content_area", null, true);
+      deleteCookie("JSESSIONID", "/portfolio", null, true);
+      deleteCookie("JSESSIONID", "/evidence_area", null, true);
+      deleteCookie("JSESSIONID", "/public", null, true);
+      deleteCookie("JSESSIONID", "/webapps/chalkbox", null, true);
+      deleteCookie("JSESSIONID", "", null, true);
+      deleteCookie("JSESSIONID", "/webapps/login", null, true);
+      deleteCookie("JSESSIONID", "/webapps/taglibs", null, true);
+      deleteCookie("JSESSIONID", "/webapps/ws", null, true);
+      deleteCookie("JSESSIONID", "/webapps/wysiwyg", null, true);
+      deleteCookie("JSESSIONID", "/bbcswebdav", null, true);
+      deleteCookie("JSESSIONID", "/webapps/cmsmain", null, true);
+      deleteCookie("JSESSIONID", "/webapps/xythoswfs", null, true);
+      deleteCookie("JSESSIONID", "/admin", null, true);
+      deleteCookie("JSESSIONID", "/colorpalettes", null, true);
+      deleteCookie("JSESSIONID", "/coursethemes", null, true);
+      deleteCookie("JSESSIONID", "/common", null, true);
+      deleteCookie("JSESSIONID", "/fonts", null, true);
+      deleteCookie("JSESSIONID", "/javascript", null, true);
+      deleteCookie("JSESSIONID", "/lib", null, true);
+      deleteCookie("JSESSIONID", "/login", null, true);
+      deleteCookie("JSESSIONID", "/themes", null, true);
+      deleteCookie("JSESSIONID", "/ui", null, true);
+      deleteCookie("JSESSIONID", "/ui-ultra", null, true);
+      deleteCookie("JSESSIONID", "/learn/api", null, true);
+      deleteCookie("JSESSIONID", "/webapps/dataIntegration", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-gate-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/software-updates", null, true);
+      deleteCookie("JSESSIONID", "/webapps/goal", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-social-learning-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/api-gateway", null, true);
+      deleteCookie("JSESSIONID", "/webapps/rubric", null, true);
+      deleteCookie("JSESSIONID", "/webapps/streamViewer", null, true);
+      deleteCookie("JSESSIONID", "/webapps/submission-services", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-content-model-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-group-mgmt-LEARN", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-ultra-conversion", null, true);
+      deleteCookie("JSESSIONID", "/webapps/gradebook", null, true);
+      deleteCookie("JSESSIONID", "/webapps/assessment", null, true);
+      deleteCookie("JSESSIONID", "/webapps/videointegration", null, true);
+      deleteCookie("JSESSIONID", "/webapps/vtbe-tinymce-ephox-hyperlinking", null, true);
+      deleteCookie("JSESSIONID", "/webapps/vtbe-tinymce-ephox-spelling", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bbcms", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-common-styles-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/vtbe-tinymce", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-xss-filter-whitelist-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-xss-filter-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/caliper", null, true);
+      deleteCookie("JSESSIONID", "/webapps/inline-grading", null, true);
+      deleteCookie("JSESSIONID", "/webapps/portfolio", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-selfpeer-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/partner-cloud", null, true);
+      deleteCookie("JSESSIONID", "/webapps/spreview", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-xss-input-validation-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/evidenceCollection", null, true);
+      deleteCookie("JSESSIONID", "/webapps/taskprogress", null, true);
+      deleteCookie("JSESSIONID", "/webapps/operational-data-store", null, true);
+      deleteCookie("JSESSIONID", "/webapps/Bb-wiki-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/allyintegration", null, true);
+      deleteCookie("JSESSIONID", "/webapps/assignment", null, true);
+      deleteCookie("JSESSIONID", "/webapps/consulting-central", null, true);
+      deleteCookie("JSESSIONID", "/webapps/discussionboard", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-mygrades-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/blogs-journals", null, true);
+      deleteCookie("JSESSIONID", "/webapps/ist-Ensemble-Building-Block-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/ultraui", null, true);
+      deleteCookie("JSESSIONID", "/webapps/lobj-campuspack-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/lobj-journal-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/lobj-expo-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/es-examsoftv2-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/lobj-wiki-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/ppto-PanoptoCourseTool-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/Teg-Tegrity-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bbgs-WileyPLUS-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bbgs-internships_integration-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/mac-iclicker-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/dropbox-integration", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-data-integration-lis-final-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/Bb-McGrawHill-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bbgs-vitalsource-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-data-integration-lis-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-1027954530152-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-cntplayer-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-auth-provider-cas-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/HLS-CourseSyncTool-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-auth-provider-ldap-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/time-time-plgnhndl-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-evidence-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/rs-lockdown-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bbtextbook", null, true);
+      deleteCookie("JSESSIONID", "/webapps/insight-report", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-cx-ext-ce4-plgnhndl-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/enterpriseSurvey", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bbgs-mylab_mastering_b2-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/achievements", null, true);
+      deleteCookie("JSESSIONID", "/webapps/date-management", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-nautilus-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/mdb-sa-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/cmsadmin", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bbcxcommoncartridge", null, true);
+      deleteCookie("JSESSIONID", "/webapps/retention", null, true);
+      deleteCookie("JSESSIONID", "/webapps/scor-scormengine-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-theme-diff-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/telemetry", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bbgs-goal-performance-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/privacy-disclosure", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-cx-ext-vista-plgnhndl-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/cloudstorageintegration", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-mashups-flickr-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/plugins", null, true);
+      deleteCookie("JSESSIONID", "/webapps/attendance", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-cx-ext-angel-plgnhndl-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-mashups-youtube-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/ee-Eesypluginv2-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/osc-BasicLTI-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/wa-webassign-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/YuJa-Mashup-YuJa-Content-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/pso-lti-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/blackboard", null, true);
+      deleteCookie("JSESSIONID", "/webapps/scnt-cclimate-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bfus-BrainfuseSSO-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bbgs-CourseRubricsRpt-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/portal", null, true);
+      deleteCookie("JSESSIONID", "/webapps/tsc-relay-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bbmh-info-gathering-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-mashups-slideshare-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/usf-impersonate-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/usc-photo-roster-usc-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/any-acrbb-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bbgs-mindlinks-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-telephony-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/calendar", null, true);
+      deleteCookie("JSESSIONID", "/webapps/collab-ultra", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-data-integration-ss-xml-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-data-integration-flatfile-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/ubsh-lti-integration-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/Bb-mobile-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-integration-gateway-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-data-integration-ims-xml-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/auth-saml", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bbgs-nbc-content-integration-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-financial-aid-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/sfrs-admin1-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-health-check-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-vista-ext-plgnhndl-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-ce4-ext-plgnhndl-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/ftc-LiveText-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/xplor-connector", null, true);
+      deleteCookie("JSESSIONID", "/webapps/item-analysis", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bstn-eduplugin-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bb-alerts-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/bbgs-reportingfrmwrk-BB5dd6acf5e22a7", null, true);
+      deleteCookie("JSESSIONID", "/webapps/searchwidgets", null, true);
+
+  if (guestLocaleCookie != null)
   {
-    document.location = cancelUrl;
+    setCookie("guest.session.locale", guestLocaleCookie);
   }
-}
-
-function persistDisplayPreference(element, value){
-  ClientCache.setItem(element,value);
-}
-
-function overrideFilterBlocks( formattedUserName, ipAddress )
-{
-  AssessmentDWRFacade.overrideFilterBlocks( formattedUserName, ipAddress, '_1116675_1', '_680217_1', {
-    callback:function(str) {
-      if ( str == 'ok' ){
-        location.reload(true);
-      } else {
-        alert(str);
-      }
-    }
-  });
-}
-
-function dismissFilterBlocks( formattedUserName, ipAddress )
-{
-  AssessmentDWRFacade.dismissFilterBlocks( formattedUserName, ipAddress, '_1116675_1', '_680217_1', {
-    callback:function(str) {
-      if ( str == 'ok' ){
-        location.reload(true);
-      } else {
-        alert(str);
-      }
-    }
-  });
-}
-
-// reset session data
-FastInit.addOnLoad( function()
-{
-  persistDisplayPreference("instructionsText","inline");
-
-
-}
-);
-</script>
-
-<div style='display:none' id="invalidIpAddressLightbox">
-	<div class="container clearfix">
-     <p class="u_controlsWrapper">You are not in the correct location to take this test</p>
-     <p class="u_controlsWrapper">Your IP address is recorded as:</p>
-     <p class="codeOutput u_centerAlign">71.70.74.211</p>
-     <p class="u_controlsWrapper"></p>
-	  <div class="u_controlsWrapper u_reverseAlign">
-	    <a class="button-4" href="/webapps/blackboard/content/listContent.jsp?content_id=_14830633_1&course_id=_1116675_1"> Cancel</a>
-	    <a class="button-4" onclick="javascript:location.reload(true);" href="#"> Retry</a>
-	  </div>
-	</div>
-</div>
-
-
-<div id="dataCollectionContainer">
-<div class="submitStepTop">
-</div>
-
-     <div id="step1" class=" " >
-       <h3  id="steptitle1" class="steptitle">
-               <span id="stepnumber1">1.</span> &nbsp;
-            Instructions
-      </h3>     <div id="stepcontent1" class="  stepcontent  " >
-   <ol role="presentation">
-
-
-
-
-<li   >
-<div class="label">
-          Description
-    </div>
-
-
-<div class="field">
-
-  <html>
- <head></head>
- <body>
-  <div class="vtbegenerated">
-   <p>Quiz covering...</p>
-   <p><a href="https://blackboard.sc.edu/webapps/discussionboard/do/message?action=list_messages&amp;course_id=_1116675_1&amp;nav=discussion_board_entry&amp;conf_id=_1020904_1&amp;forum_id=_776376_1&amp;message_id=_13839408_1" style="font-family: 'Open Sans', sans-serif; text-shadow: none !important; letter-spacing: normal; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-weight: 400; font-style: normal; font-size: 12.8px; color: #1874a4; text-decoration: none; font-variant-ligatures: normal; font-variant-caps: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;">003_PL_2_Compilaton_Interpretation&nbsp;</a><span style="color: #000000; font-family: 'Open Sans', sans-serif; font-size: 12.8px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #f8f8f8; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;"><br></span></p>
-   <p><span style="color: #000000; font-family: 'Open Sans', sans-serif; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;"> <a href="https://blackboard.sc.edu/webapps/discussionboard/do/message?action=list_messages&amp;course_id=_1116675_1&amp;nav=discussion_board_entry&amp;conf_id=_1020904_1&amp;forum_id=_776376_1&amp;message_id=_13839418_1" style="font-family: 'Open Sans', sans-serif; text-shadow: none !important; letter-spacing: normal; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-weight: 400; font-style: normal; font-size: 12.8px; color: #1874a4; text-decoration: none; font-variant-ligatures: normal; font-variant-caps: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;">003_PL_3_Software_Dev_Abstraction</a><span style="color: #000000; font-family: 'Open Sans', sans-serif; font-size: 12.8px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #f8f8f8; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;"><br></span></span></p>
-   <p><span style="color: #000000; font-family: 'Open Sans', sans-serif; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;"> <a href="https://blackboard.sc.edu/webapps/discussionboard/do/message?action=list_messages&amp;course_id=_1116675_1&amp;nav=discussion_board_entry&amp;conf_id=_1020904_1&amp;forum_id=_776376_1&amp;message_id=_13839472_1" style="font-family: 'Open Sans', sans-serif; text-shadow: none !important; letter-spacing: normal; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-weight: 400; font-style: normal; font-size: 12.8px; color: #1874a4; text-decoration: none; font-variant-ligatures: normal; font-variant-caps: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;">005_PL_0_Design_Arch&nbsp;</a><span style="color: #000000; font-family: 'Open Sans', sans-serif; font-size: 12.8px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #f8f8f8; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;"></span></span></p>
-   <p><span style="color: #000000; font-family: 'Open Sans', sans-serif; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;"> <a href="https://blackboard.sc.edu/webapps/discussionboard/do/message?action=list_messages&amp;course_id=_1116675_1&amp;nav=discussion_board_entry&amp;conf_id=_1020904_1&amp;forum_id=_776376_1&amp;message_id=_13922046_1" style="font-family: 'Open Sans', sans-serif; text-shadow: none !important; letter-spacing: normal; margin: 0px; padding: 0px; border: 0px; outline: 0px; font-weight: 400; font-style: normal; font-size: 12.8px; color: #1874a4; text-decoration: none; font-variant-ligatures: normal; font-variant-caps: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;">005_PL_1_Language_Families&nbsp;</a></span></p>
-   <p><span style="color: #000000; font-family: 'Open Sans', sans-serif; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;">Watch those videos before attempting the quiz.</span></p>
-   <p><strong><span style="color: #000000; font-family: 'Open Sans', sans-serif; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;">Due 9/14 11:59 PM Two Attempts, Highest Score kept</span></strong></p>
-  </div>
- </body>
-</html>
-    <span class="fieldErrorText"></span>
-
-</div>
-</li>
-
-<li   >
-<div class="label">
-          Force Completion
-    </div>
-
-
-<div class="field">
-
-  This test can be saved and resumed later.
-    <span class="fieldErrorText"></span>
-
-</div>
-</li>
-
-<li   >
-<div class="label">
-          Multiple Attempts
-    </div>
-
-
-<div class="field">
-
-  This test allows multiple attempts.
-    <span class="fieldErrorText"></span>
-
-</div>
-</li>
-
-<li   >
-<div class="label">
-          Due Date
-    </div>
-
-
-<div class="field">
-
-  This Test is due on September 14, 2020 11:59:00 PM EDT.
-    <span class="fieldErrorText"></span>
-
-</div>
-</li> Click <strong>Begin</strong> to start: Quiz Abstractions, Architectures, Compilers, Language Families.  Click <strong>Cancel</strong> to go back.
-   </ol>
-  </div>
-
- </div>
-
- 		 <div class="submitStepBottom">
-<h3 id="steptitle2" class="steptitle submittitle">
- <span id="stepnumber2">2.</span>
- &nbsp;Submit
-</h3>
-<p class="taskbuttonhelp">Click Begin to start.  Click Cancel to quit.</p>
-
-<div class="taskbuttondiv_wrapper">
-<p class="taskbuttondiv" id="bottom_submitButtonRow">
-			<input  class="button-2" type="button" name="bottom_Cancel" role="button" value="Cancel" onclick="document.location='/webapps/blackboard/content/listContent.jsp?content_id=_14830633_1&course_id=_1116675_1';">
-		<input  class="submit button-1" name="bottom_Begin" type="submit" role="button" value="Begin" onClick="javascript:clickOnBegin();">
-
-</p>
-</div>
-
-</div>
-
-</div>
-
-   </div>
-
-     </div>
-   </div>
-   </div>
-   </div>
-</div></div>
-
-  <script type="text/javascript">page.bundle.addKey('inlineconfirmation.close','Close');page.bundle.addKey('inlineconfirmation.refresh','Refresh');page.bundle.addKey('hidden.link.close.menu','End of menu. Click to return to associated item.');page.bundle.addKey('hidden.link.close.form','End of form. Click to return to associated item.');page.bundle.addKey('lightbox.loading','Loading...');page.bundle.addKey('yt.stopped','Stopped:');page.bundle.addKey('yt.playing','Playing:');page.bundle.addKey('yt.cued','Cued:');page.bundle.addKey('yt.buffering','Buffering:');page.bundle.addKey('yt.paused','Paused:');page.bundle.addKey('yt.ended','Ended:');page.bundle.addKey('yt.play','Play');page.bundle.addKey('yt.pause','Pause');page.bundle.addKey('yt.mute','Mute');page.bundle.addKey('yt.unmute','Unmute');page.bundle.addKey('lightbox.overlay','{0} has been opened as a lightbox overlaying the current page.');page.bundle.addKey('display.playerControls','Player Controls');page.bundle.addKey('display.videoPlayerControls','Video Player Controls');page.bundle.addKey('display.play','Play');page.bundle.addKey('display.stop','Stop');page.bundle.addKey('display.volumeUp','Volume Up');page.bundle.addKey('display.volumeDown','Volume Down');page.bundle.addKey('display.mute','Mute');page.bundle.addKey('display.videoStatus','Video Status');page.bundle.addKey('display.closePlayerControls','Close Player Controls');page.bundle.addKey('display.embeddedVideoPlayer','Embedded Video Player');page.bundle.addKey('display.of','of');page.bundle.addKey('display.view.on.flickr','View Photo on Flickr');page.bundle.addKey('mashups.content.data.msg','We are unable to display the mashup content. This happens if the system detects an invalid URL. Remove the mashup item and try again to resolve this issue.');page.bundle.addKey('contextmenu.frame.title','Menu frame');page.bundle.addKey('frameset.contentframe.title','Content');page.bundle.addKey('common.pair.paren','{0} ({1})');page.bundle.addKey('coursemenu.show','Show Course Menu');page.bundle.addKey('coursemenu.hide','Hide Course Menu');page.bundle.addKey('dynamictree.expand','Expand');page.bundle.addKey('dynamictree.collapse','Collapse');page.bundle.addKey('dynamictree.expand.folder','Expand {0} tree folder');page.bundle.addKey('dynamictree.collapse.folder','Collapse {0} tree folder');page.bundle.addKey('dragdrop.accessible.error.chooseOption','Select an item first.');page.bundle.addKey('dragdrop.accessible.empty','No items available to reposition.');page.bundle.addKey('dragdrop.accessible.complete','Items have been reordered.');page.bundle.addKey('dragdrop.accessible.complete.nochange','No ordering changes made.');page.bundle.addKey('closeStr','Close');page.bundle.addKey('moreOptionsStr','Click to see options');page.bundle.addKey('hiddenStr','This link is hidden from students');page.bundle.addKey('emptyStr','This link has no content');page.bundle.addKey('entryPointChangeConfirmStr','The entry point will changed to the next available Content');page.bundle.addKey('subheaderColonStr','Subheader: {0}');page.bundle.addKey('confirmQuickEnrollStr','You will be given the role: {0}. Proceed?');page.bundle.addKey('enterSearchKeyStr','Enter Search Criteria.');page.bundle.addKey('courseWelcomePageLbTitle','Quick Setup Guide');page.bundle.addKey('expandCollapse.expand.section.nocolon','Expand');page.bundle.addKey('expandCollapse.collapse.section.nocolon','Collapse');page.bundle.addKey('expandCollapse.expand.section.param','Expand {0}');page.bundle.addKey('expandCollapse.collapse.section.param','Collapse {0}');page.bundle.addKey('breadcrumbs.expand','Click to expand the breadcrumbs');</script>
-  <script type="text/javascript">
-   var course_id = "_1116675_1";
-   var courseTitle = "Programming Lang Structures (CSCE330-003-FALL-2020)";
-   var confirmDeleteMenuItemMsg = "Are you sure you want to delete this item?";
-   var confirmQuickUnenrollMsg = "Any user data created while quick enrolled in this course will be deleted. Proceed?";
-   var confirmQuickEnrollMsg = "You will be given the role: Instructor. Proceed?";
-   var inNewWindow = false;
-   var theCourseMenu;
+  setCookie("JSESSIONID", startingJSessionCookie);
+   });
  </script>
 
-  <script type="application/javascript">
-
-      function showTooltip() {
-      	var tooltipBtn = '<input class="submit tooltipButton" type="submit" role="button"' +
-												 'value="Got it" id="tooltipButton" onclick="removeTooltip()" } />';
-				if ( $j( "#ftueTooltip" ) ) {
-					if ( $j( "#tooltipButton" ) ) $j( "#tooltipButton" ).remove();
-					$j( "#ftueTooltip" ).append( tooltipBtn );
-				}
-
-      	if ( $j( ".global-nav-bar-wrap-mobile-nav" ).css('visibility') === 'visible' ) {
-					$j( ".global-nav-bar-wrap-mobile-nav" ).prepend( $j( "#ftueTooltip" ) );
-				} else {
-					$j( "#global-nav" ).append( $j( "#ftueTooltip" ) );
-				}
-        $j( "#ftueTooltip" ).css('visibility', 'visible');
-      }
-
-			function removeTooltip() {
-				if ( $j( '#ftueTooltip' ) ) {
-					$j( '#ftueTooltip' ).remove();
-				}
-			}
 
 
-			if ( false )
-			{
-				var redirect = "/webapps/bb-social-learning-BB5dd6acf5e22a7/execute/mybb?cmd=display&toolId=LTI_LAUNCH_PLUGIN_____bbAssist--B";
-				if ( redirect ) {
-					var contents = '<div id="ftueLightboxWrapper">' +
-												 '<span class="ftueTitle" >Introducing Assist</span>' +
-												 '<img class="ftueImage" src="/images/ci/ftue/AssistPromoModal.png"/>' +
-												 '<span class="ftueText" >Assist is the student success hub for campus and online resources available on the desktop or on the go with the Blackboard mobile app.</span>' +
-												 '</div>' +
-												 '<div id="ftueFooter">' +
-												 '<input class="submit ftueButton" type="submit" role="button" ' +
-												 'value="Explore Assist" onclick=\'window.location="' + redirect + '"\' />' +
-												 '</div>';
+<div id="loginFormFields" class="clearfix">
+  <ul id="loginFormList" class="clearfix">
+    <li class="clearfix">
+      <label for="user_id">Username</label>
+      <input type="text" name="user_id" id="user_id" size="25" maxlength="50" autocomplete="off"/>
+    </li>
+    <li class="clearfix">
+      <label for="password">Password</label>
+      <input size="25" name="password" id="password" type="password" autocomplete="off"/>
+    </li>
+    <li class="clearfix">
+          <input id="entry-login" type="submit" value="Sign In" name="login" class="button expand inverse outline"/>
+        </li>
+  </ul>
 
-					var lb = new lightbox.Lightbox(
-						{
-							lightboxId: 'ftueLightbox',
-							contents: contents,
-							closeOnBodyClick: false,
-							onClose: 'showTooltip()'
-						} );
-					lb.open();
-				}
-			}
-		</script>
+	<div class="login-form-footer row collapse">
+		<div class="stay-signed-in small-6 columns text-left">
+    		</div>
+			</div>
 
+</div>
+
+
+
+  <input type="hidden" name="action" value="login" />
+  <input type="hidden" name="new_loc" value="/ultra" />
+  <input type='hidden' name='blackboard.platform.security.NonceUtil.nonce' value='0244a20b-daf9-40b5-a452-7ee9e6bb8f08'>
+</form>
+  <div id="loginRedirectProviders">
+  <button id="redirectProvidersDropdownButton" class="button dropdown expand">Sign in with third-party account</button>
+  <ul id="loginRedirectProviderList">
+           <li><a href="/webapps/bb-auth-provider-cas-BB5dd6acf5e22a7/execute/casLogin?cmd=login&authProviderId=_132_1&redirectUrl=https%3A%2F%2Fblackboard.sc.edu%2Fultra" ><div class="defaultProviderIcon"></div>UofSC Secure Carolina Login</a></li>
+         </ul>
+ </div>
+ <script type="text/javascript">
+   var providerListDropdownButton = $('redirectProvidersDropdownButton');
+   var providerList = $('loginRedirectProviderList');
+   // Open/ close providers list dropdown
+   providerListDropdownButton.on('click', function(event, element) {
+     providerList.toggleClassName('open');
+     providerList.writeAttribute('aria-hidden', !providerList.hasClassName( 'open' ));
+   });
+
+   // Close provider list when clicking elsewhere on the page
+   $$("body").first().on('click', function(event) {
+     if (!$(event.target).hasClassName('dropdown') && providerList.hasClassName('open')){
+       providerList.removeClassName('open');
+     }
+   });
+ </script>
+</div>
+
+<div class="systemAnnouncementsLogin">
+
+<div class="logo align-self-center">
+
+<h1 class="login-logo new-logo customized-logo" >
+    <span>Blackboard Learn &#8482;</span>
+    <img src="/branding/_1_1/loginLogo/CustomLoginLogo.png?m=k5wllnlm" alt="" />
+</h1>
+</div>
+    <h1>Contact Blackboard Support</h1>
+
+          <div class="blockBTNlogin">
+            <h1><img src="https://temas.s3.amazonaws.com/Blackboard/University%20of%20South%20Carolina/phone.png">Phone</h1>
+            <p>Call <a href="tel:8037771800">803-777-1800</a> To reach Blackboard's<br>service desk.</p>
+        </div>
+</div>
+
+
+<div class="bbResources">
+  <h1>Get Mobile</h1>
+
+<div class="blockBTNlogin">
+ <p>Access grades, course content, and more - right from the Blackboard app on your phone.</p>
+    <p><b>Available today on iOS or Android:</b></p>
+    <p>
+      <a class="appimg" href="https://itunes.apple.com/app/blackboard-app/id950424861?mt=8" target="_blank"><img src="https://s3.amazonaws.com/bb-student/images/appstore.png" alt="iTunes" width="70" height="25" style="margin: 5px;"></a>
+      <a class="appimg" href="https://play.google.com/store/apps/details?id=com.blackboard.android.bbstudent&hl=en" target="_blank"><img src="https://s3.amazonaws.com/bb-student/images/google-play.png" alt="Google Play" width="70" height="25" style="margin: 5px;"></a>
+    </p>
+      </div>
+
+
+      <div class="blockBTNlogin">
+        <h1>Blackboard Instructor</h1>
+      <p>Blackboard Instructor is Blackboard's brand new mobile application that gives instructors a quick and easy way to manage courses, interact with students, and view content.</p>
+       <p><b>Available today on iOS or Android:</b></p>
+    <p>
+      <a class="appimg" href="https://itunes.apple.com/app/blackboard-instructor/id1088457824?ls=1&mt=8" target="_blank"><img src="https://s3.amazonaws.com/bb-student/images/appstore.png" alt="iTunes" width="70" height="25" style="margin: 5px;"></a>
+      <a class="appimg" href="https://play.google.com/store/apps/details?id=com.blackboard.android.bbinstructor" target="_blank"><img src="https://s3.amazonaws.com/bb-student/images/google-play.png" alt="Google Play" width="70" height="25" style="margin: 5px;"></a>
+    </p>
+    </div>
+    <div class="blockBTNlogin">
+        <p>Use this code (FEAYYU) in mobile apps when prompted for the institution name</p>
+    </div>
+  </div>
+
+    <div class="login-page-announcements">
+
+</div>
+</div>
+<div class="small-12 small-centered text-center columns footerblock" id="pagefooter">
+      <div id="copyright" class="clearfix">
   <script type="text/javascript">
-    page.bundle.addKey('globalnav.menu.expand','Expand\x20Global\x20Nav');
-    page.bundle.addKey('globalnav.menu.collapse','Collapse\x20Global\x20Nav');
+      function showCopyrightDetail(){
+        if(document.getElementById('copyrightDetail').style.display=="none" || document.getElementById('copyrightDetail').style.display=="")    {        document.getElementById('copyrightDetail').style.display="block";    }
+        else    {        document.getElementById('copyrightDetail').style.display="none";    }}
+  </script>
+  <div class="newCopyright">
+      	<div class="legal">
+  		&copy; 1997-2020 Blackboard Inc. All Rights Reserved.
+  	</div>
+  	  </div>
 
-    function insertSkipLinkAfterBodyStart(referenceNode, newNode, linkContent)
-    {
-      if( top === self )
-      {
-        /* Evaluates if the page is not been loaded inside Iframe,
-        only attach skip-link in original view, not Ultra, because ultra has his own skip link. */
-        referenceNode.parentNode.insertBefore( newNode, referenceNode );
-        newNode.innerHTML = linkContent;
+  </div><div id="loginOptions">
+
+
+<div id="gatewayButtons">
+<ul class="inline-list">
+
+
+
+      <li id="help-link"><a href="https://help.blackboard.com/001_000en_US" target="_blank" title="Bb Login Help">Help</a></li>
+
+  <li id="privacy-link"><a href="#" onClick="showPrivacyPolicy();" title="Privacy and Terms of Use">Privacy and Terms of Use</a></li>
+</ul>
+</div>
+</div>
+    </div>
+
+
+
+  <script type="text/javascript">page.bundle.addKey('inlineconfirmation.close','Close');page.bundle.addKey('inlineconfirmation.refresh','Refresh');page.bundle.addKey('hidden.link.close.menu','End of menu. Click to return to associated item.');page.bundle.addKey('hidden.link.close.form','End of form. Click to return to associated item.');page.bundle.addKey('lightbox.loading','Loading...');page.bundle.addKey('yt.stopped','Stopped:');page.bundle.addKey('yt.playing','Playing:');page.bundle.addKey('yt.cued','Cued:');page.bundle.addKey('yt.buffering','Buffering:');page.bundle.addKey('yt.paused','Paused:');page.bundle.addKey('yt.ended','Ended:');page.bundle.addKey('yt.play','Play');page.bundle.addKey('yt.pause','Pause');page.bundle.addKey('yt.mute','Mute');page.bundle.addKey('yt.unmute','Unmute');page.bundle.addKey('lightbox.overlay','{0} has been opened as a lightbox overlaying the current page.');page.bundle.addKey('display.playerControls','Player Controls');page.bundle.addKey('display.videoPlayerControls','Video Player Controls');page.bundle.addKey('display.play','Play');page.bundle.addKey('display.stop','Stop');page.bundle.addKey('display.volumeUp','Volume Up');page.bundle.addKey('display.volumeDown','Volume Down');page.bundle.addKey('display.mute','Mute');page.bundle.addKey('display.videoStatus','Video Status');page.bundle.addKey('display.closePlayerControls','Close Player Controls');page.bundle.addKey('display.embeddedVideoPlayer','Embedded Video Player');page.bundle.addKey('display.of','of');page.bundle.addKey('display.view.on.flickr','View Photo on Flickr');page.bundle.addKey('mashups.content.data.msg','We are unable to display the mashup content. This happens if the system detects an invalid URL. Remove the mashup item and try again to resolve this issue.');page.bundle.addKey('contextmenu.frame.title','Menu frame');page.bundle.addKey('frameset.contentframe.title','Content');page.bundle.addKey('common.pair.paren','{0} ({1})');</script>
+  <link href="https://fonts.googleapis.com/css?family=Oswald:700&display=swap" rel="stylesheet">
+    <script type="text/javascript">
+      function loadLoginPage() {
+        if (top != self) {
+          top.location.replace(self.location.href);
+        }
+        if(document.forms.login.user_id != undefined)
+        {
+          verify_username_password(document.forms.login);
+        }
+        setTimeout("triggerScreenreaderAlert()", 500);
       }
+
+      function triggerScreenreaderAlert() {
+        if (document.getElementById('loginErrorMessage')) {
+          $('loginErrorMessage').update($('loginErrorMessage').innerHTML);
+        }
+      }
+    </script>
+
+    <script type=âtext/javascriptâ>
+    if(window.location.href.indexOf(âtsuâ) > -1) {
+       //set element styles for custom page//
     }
+    </script>
 
-    var skipLink = new Element('a',{id:'skip-to-content', href: '#content', tabIndex: '1'});
-    var learnBody = document.body.firstChild;
-    var linkContent = 'Skip\x20To\x20Content';
-    this.insertSkipLinkAfterBodyStart(learnBody, skipLink, linkContent);
-  </script>
 
   <script type="text/javascript">
-    page.bundle.addKey('quick_links.link.title','Navigate\x20to\x20element\x20\x7B1\x7D\x20of\x20type\x20\x7B2\x7D\x20in\x20\x7B0\x7D\x20frame');
-    page.bundle.addKey('quick_links.lightbox_title','Quick\x20Links');
-    page.bundle.addKey('quick_links.link_title','Open\x20Quick\x20Links');
-    page.bundle.addKey('quick_links.hotkey.shift','Shift');
-    page.bundle.addKey('quick_links.hotkey.control','Ctrl');
-    page.bundle.addKey('quick_links.hotkey.alt','Alt');
-    page.bundle.addKey('quick_links.hotkey.combination_divider','\x2B');
+    function showPrivacyPolicy() {
+      cookieConsent = new CookieConsent('/webapps/privacy-disclosure/');
+      cookieConsent.showPolicy( 'blackboard.platform.security.NonceUtil.nonce=login', true );
+    }
   </script>
 
-  <script type="text/javascript">quickLinks.initialize( [ 'null' ] );</script>
 
    <script type="text/javascript">
    FastInit.addOnLoad( function()
@@ -673,23 +1264,9 @@ FastInit.addOnLoad( function()
        {
         try {DWREngine.beginBatch();} catch(ignore) {}
        }
-                page.decoratePageBanner();
-                                                             function dataCollRendererInit() {var dccform=$$('div.stepcontent input:visible[type!=hidden], div.stepcontent textarea:visible, div.stepcontent select:visible, div.stepcontent a:visible, div.stepcontent button:visible');if(dccform && dccform.length > 0){dccform[0].focus();}};
-                                                             setTimeout(function(){dataCollRendererInit();},100);
-                                                             page.util.initPinBottomSubmitStep();
-                                                             page.util.initPinBottomSubmitStep();
-                                                             page.util.initPinBottomSubmitStep();
-                                                             new page.PageHelpToggler(true, 'Help is On: Click to hide page help.', 'Help is Off: Click to show page help.', false );
-                                                             breadcrumbs.rightMostNavItem = 'null';
-                                                             breadcrumbs.rightMostParentURL = '/webapps/blackboard/content/listContent.jsp?course_id=_1116675_1&content_id=_14830633_1&mode=reset';
-                                                             new page.PageMenuToggler(true,'courseMenuToggle_1116675_1', true);
-                                                             courseMenu.nonceKey = 'blackboard.platform.security.NonceUtil.nonce.ajax';
-                                                             courseMenu.nonceValue = '7c837391-8ac7-4c54-a756-50258f63b03c';
-                                                             new page.PaletteController('courseMenuPalette', 'courseMenu_link', false, false);
-                                                             theCourseMenu = new courseMenu.CourseMenu('/webapps/blackboard/execute/doCourseMenuAction', '/webapps/blackboard/execute/getCourseMenuContextMenu');
-                                                             if (typeof(initEditors) == 'function') { initEditors(); };
+                if (typeof(initEditors) == 'function') { initEditors(); };
                                                              if (window['org'] && window['org']['owasp']) { org.owasp.esapi.ESAPI.initialize(); };
-                                                             AllyIntegration.initJWT('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJBTExZIiwic3ViIjoiQUxMWV9UT0tFTiIsImZpbGVJZHMiOltdLCJjb3Vyc2VSb2xlIjoidW5wcml2aWxlZ2VkIiwiaXNzIjoiM2dxcEpIUWtGSngwM0d6OU5TbUEzQ1V0QWphZ2VmRmQiLCJyaWNoQ29udGVudElkcyI6W10sImV4cCI6MTYwNzIwNDUzMCwiaWF0IjoxNjA3MjA0MjMwLCJjb3Vyc2VJZCI6Il8xMTE2Njc1XzEiLCJ1c2VySWQiOiJfMTcxMDgwNF8xIn0.jLO7_x5mhdZw08M7uwlzLu7ANb8TQDHCongMNg70wUo');
+                                                             AllyIntegration.initJWT('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJBTExZIiwic3ViIjoiQUxMWV9UT0tFTiIsImZpbGVJZHMiOltdLCJjb3Vyc2VSb2xlIjoiIiwiaXNzIjoiM2dxcEpIUWtGSngwM0d6OU5TbUEzQ1V0QWphZ2VmRmQiLCJyaWNoQ29udGVudElkcyI6W10sImV4cCI6MTYwODA3MDQ3MiwiaWF0IjoxNjA4MDcwMTcyLCJjb3Vyc2VJZCI6IiIsInVzZXJJZCI6IiJ9.oZVujFk1LxI12WCmvaULeWX-gZd_6Dsq0N2F1AlbB5Y');
                                                              AllyIntegration.initAllyJSConfigs('prod.ally.ac','1864');
                                                              jQuery.getScript('//' + window.ALLY_CFG.baseUrl + '/integration/learn/ally.js');
                                                              quickLinks.createHelper();
@@ -698,9 +1275,10 @@ FastInit.addOnLoad( function()
          try {DWREngine.endBatch();} catch(ignore) {}
        }
                           BrowserSpecific.registerListeners();
+                loadLoginPage();
                });
    </script>
 
-<script type="text/javascript">window.NREUM||(NREUM={});NREUM.info={"errorBeacon":"bam-cell.nr-data.net","licenseKey":"232bf20b67","agent":"","beacon":"bam-cell.nr-data.net","applicationTime":48,"applicationID":"491465376","transactionName":"M1NbN0oCDxFYU0JaXAoZahdKFhUReFNCWlwKGVsPWQAKAFZRRFcdE1NbAkgTEkxJX0RHUggYShdKFhURF2RXUXQWWUwTeQAVC1Ze","queueTime":0}</script>
+<script type="text/javascript">window.NREUM||(NREUM={});NREUM.info={"errorBeacon":"bam-cell.nr-data.net","licenseKey":"232bf20b67","agent":"","beacon":"bam-cell.nr-data.net","applicationTime":15,"applicationID":"491465376","transactionName":"M1NbN0oCDxFYU0JaXAoZahdKFhUReFNCWlwKGVsPWQAKAFZRRFcdE1NbAkgTEkxbXFdQWAZZWBFcTQAXTVhTXUcNVVgXUQwPTHVfUVpdJVVNClcN","queueTime":0}</script>
 </body>
 </html>
