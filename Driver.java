@@ -29,7 +29,7 @@ public class Driver {
 			Collections.sort(assns);
 			assns.forEach(System.out::println);
 
-			System.out.println("found " + assns.size() + " blackboard assns in " + bbTime + "ms with " + Networker.reqs +" requests and " + Networker.avgReqTime / Networker.reqs + " ms per req");
+			System.out.println("found " + assns.size() + " blackboard assns in " + bbTime + "ms with " + BlackboardRetriever.reqs +" requests and " + BlackboardRetriever.avgReqTime / BlackboardRetriever.reqs + " ms per req");
 
 
 		} catch (InterruptedException | IOException | URISyntaxException e) {
