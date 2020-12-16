@@ -1,8 +1,11 @@
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.http.HttpRequest;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
@@ -13,45 +16,56 @@ public class BlackboardRetriever extends Retriever{
 	Networker net;
 	File cookieCache;
 	private static final String PATH_CACHE = "cookies.txt";
+	private String cookie;
+	public static long avgReqTime;
+	public static int reqs;
 
 	public BlackboardRetriever() throws IOException {
+		reqs = 0;
+		avgReqTime = 0;
+
 		net = getNetworker();
 		cookieCache = new File(PATH_CACHE);
 		if(!cookieCache.exists())
 			cookieCache.createNewFile();
 
+		cookie = getCookieFromCache();
 	}
 
 	public LinkedList<Assignment> retrieve() throws InterruptedException, IOException, URISyntaxException {
-		login(true);
-		return getAssns(getAllClassIDs());
+		handleCookie();
+
+		return getAssns(getClassIDs());
+	}
+
+	protected synchronized static void updateCounter(long time){
+		avgReqTime += time;
+		reqs++;
+
+		if(time >= 700)
+			System.out.println("============SLOW REQUEST");
+	}
+
+	private void handleCookie() throws IOException {
+		String cookieAttempt = this.cookie;
+		if (cookieAttempt != null) {
+			System.out.println("[Using Cookie]");
+//			net.setCookie(cookieAttempt);
+		} else {
+			cookie = getCookieViaLogin();
+//			net.setCookie(cookie);
+		}
 	}
 
 	private LinkedList<Assignment> getAssns(LinkedList<String> classIds) throws InterruptedException {
 		long time = System.currentTimeMillis();
 
 		LinkedList<Assignment> assns = new LinkedList<>();
-
-		//threads here
-		/*for(String id : classIds){
-			String nextUrl;
-			nextUrl = "https://blackboard.sc.edu/webapps/blackboard/execute/modulepage/view?course_id=" + id + "&cmp_tab_id=_564695_1&mode=view";
-			buildCookieRequest(nextUrl);
-			String classHtml = stdResponseBodyWithSend();
-
-			if(classHtml.contains("Assignments")){
-
-				String link = "https://blackboard.sc.edu" + extractAssnsLink(classHtml, "/webapps/blackboard/content/listContent.jsp\\?course_id=" + id + "&content_id=[^&]+&mode=reset(?=[\\s\\S]{0,100}Assignments)", "Link To Assns Page", "/webapps/blackboard/content/listContent.jsp?course_id=" + id, "&mode=reset");
-				assns.addAll(getAssns(id, link));
-
-			}
-		}*/
-
 		ClassThread[] threads = new ClassThread[classIds.size()];
 
 		int i=0;
 		for(Iterator<String> idsIterator = classIds.iterator();idsIterator.hasNext();i++){
-			threads[i] = new ClassThread(assns, idsIterator.next(), net.getCookie());
+			threads[i] = new ClassThread(assns, idsIterator.next(), this.cookie);
 			threads[i].start();
 		}
 
@@ -63,31 +77,28 @@ public class BlackboardRetriever extends Retriever{
 	}
 
 	private class ClassThread extends Thread {
-		String id;
+		String id, cookie;
 		LinkedList<Assignment> assns;
-		Networker networker;
 
 		public ClassThread(LinkedList<Assignment> assns, String id, String cookie) {
-			init(assns,id);
-			networker.setCookie(cookie);
-		}
-		
-		private void init(LinkedList<Assignment> assns, String id) {
 			this.id = id;
 			this.assns = assns;
-			this.networker = new Networker();
+			this.cookie = cookie;
 		}
-		
+
 		public void run() {
 			try {
-				String nextUrl = "https://blackboard.sc.edu/webapps/blackboard/execute/modulepage/view?course_id=" + id + "&cmp_tab_id=_564695_1&mode=view";
-				networker.buildCookieRequest(nextUrl);
-				String classHtml = networker.stdResponseBody();
+				String classPageUrl = "https://blackboard.sc.edu/webapps/blackboard/execute/modulepage/view?course_id=" + id + "&cmp_tab_id=_564695_1&mode=view";
+
+				/*networker.buildCookieRequest(nextUrl);
+				String classHtml = networker.stdResponseBody();*/
+
+				String classHtml = getNetworkResponse(classPageUrl, cookie);
 	
 				if(classHtml.contains("Assignments")){
 	
 					String link = "https://blackboard.sc.edu" + extractAssnsLink(classHtml, "/webapps/blackboard/content/listContent.jsp\\?course_id=" + id + "&content_id=[^&]+&mode=reset(?=[\\s\\S]{0,100}Assignments)", "Link To Assns Page", "/webapps/blackboard/content/listContent.jsp?course_id=" + id, "&mode=reset");
-					assns.addAll(getAssns(networker, id, link));
+					assns.addAll(getAssns(id, link, cookie));
 	
 				}
 
@@ -100,25 +111,23 @@ public class BlackboardRetriever extends Retriever{
 	private class AssnsThread extends Thread {
 		
 		LinkedList<Assignment> assns;
-		String type, subjectID, contentID, responseHTML;
-		Networker networker;
-		
+		String type, subjectID, contentID, responseHTML, cookie;
+
 		public AssnsThread(LinkedList<Assignment> assns, String type, String subjectID, String contentID, String responseHTML, String cookie) {
 			this.assns = assns;
 			this.type = type;
 			this.subjectID = subjectID;
 			this.contentID = contentID;
 			this.responseHTML = responseHTML;
-			networker = new Networker();
-			networker.setCookie(cookie);
+			this.cookie = cookie;
 		}
 		
 		public void run() {
 			try {
 				switch (type) {
-					case "Assignment": assns.add(parseAssn(networker, subjectID, contentID)); break;
-					case "Test" : assns.add(parseTest(networker, subjectID, contentID)); break;
-					case "Content Folder" : assns.addAll(getAssns(networker, subjectID, "https://blackboard.sc.edu" + fetchValue(responseHTML, "/webapps/blackboard/content/listContent.jsp\\?course_id=\\S{0,15}&content_id=" + contentID))); break; //todo add link
+					case "Assignment": assns.add(parseAssn(subjectID, contentID, cookie)); break;
+					case "Test" : assns.add(parseTest(subjectID, contentID, cookie)); break;
+					case "Content Folder" : assns.addAll(getAssns(subjectID, "https://blackboard.sc.edu" + fetchValue(responseHTML, "/webapps/blackboard/content/listContent.jsp\\?course_id=\\S{0,15}&content_id=" + contentID), cookie)); break; //todo add link
 					case "McGraw-Hill Assignment Dynamic": assns.add(parseMGH(contentID, responseHTML)); break;
 					case "Survey": assns.add(parseSurvery(subjectID)); break;
 					default: parseOther(type);
@@ -132,11 +141,13 @@ public class BlackboardRetriever extends Retriever{
 		
 	}
 
-	private LinkedList<Assignment> getAssns(Networker networker, String subjectID, String link) throws URISyntaxException, IOException, InterruptedException {
+	private LinkedList<Assignment> getAssns(String subjectID, String link, String cookie) throws URISyntaxException, IOException, InterruptedException {
 		long time = System.currentTimeMillis();
 
-		networker.buildCookieRequest(link);
-		String responseHTML = networker.stdResponseBody();
+		/*networker.buildCookieRequest(link);
+		String responseHTML = networker.stdResponseBody();*/
+
+		String responseHTML = getNetworkResponse(link, cookie);
 
 		LinkedList<Assignment> assns = new LinkedList<>();
 
@@ -167,7 +178,7 @@ public class BlackboardRetriever extends Retriever{
 				case "Survey": assns.add(parseSurvery(subjectID)); break;
 				default: parseOther(type);
 			}*/
-			threads[i] = new AssnsThread(assns, type, subjectID, contentID, responseHTML, networker.getCookie());
+			threads[i] = new AssnsThread(assns, type, subjectID, contentID, responseHTML, cookie);
 			threads[i].start();
 		}
 
@@ -241,28 +252,43 @@ public class BlackboardRetriever extends Retriever{
 		return new Assignment(firstHalf, secondHalf, true);
 	}
 
-	private Assignment parseAssn(Networker networker, String subjectID, String contentID) throws URISyntaxException, IOException, InterruptedException {
+	private Assignment parseAssn(String subjectID, String contentID, String cookie) throws IOException {
 		long time = System.currentTimeMillis();
+		String assnUrl = "https://blackboard.sc.edu/webapps/assignment/uploadAssignment?content_id=" + contentID + "&course_id=" + subjectID +"&group_id=&mode=view";
 
-		networker.buildCookieRequest("https://blackboard.sc.edu/webapps/assignment/uploadAssignment?content_id=" + contentID + "&course_id=" + subjectID +"&group_id=&mode=view");
+		/*String assnHTML = getNetworkResponse(assnUrl, cookie);
+		Assignment assn = getAssn(assnHTML);
 
-		String toParse = networker.stdResponseBody();
-		Assignment assn = getAssn(toParse);
 		if(assn == null) {
 			System.out.println("Failed ASSN type -- reattempt");
-			return parseAssn(networker, subjectID, contentID);
+			return parseAssn(subjectID, contentID, cookie);
+		}*/
+
+		String assnHTML = "";
+
+		do assnHTML = getNetworkResponse(assnUrl, cookie);
+		while (assnHTML.equals("503"));
+
+		Assignment assn = getAssn(assnHTML);
+
+		if(assn == null) {
+			System.out.println("Failed ASSN type -- reattempt");
+			return parseAssn(subjectID, contentID, cookie);
 		}
 
 		time = System.currentTimeMillis() - time;
 		return assn;
 	}
 
-	private Assignment parseTest(Networker networker, String subjectID, String contentID) throws URISyntaxException, IOException, InterruptedException {
+	private Assignment parseTest(String subjectID, String contentID, String cookie) throws IOException {
 		long time = System.currentTimeMillis();
 
-		networker.buildCookieRequest("https://blackboard.sc.edu/webapps/assessment/take/launchAssessment.jsp?content_id=" + contentID + "&course_id=" + subjectID +"&group_id=&mode=view");
+		String testUrl = "https://blackboard.sc.edu/webapps/assessment/take/launchAssessment.jsp?content_id=" + contentID + "&course_id=" + subjectID +"&group_id=&mode=view";
 
-		String htmlToParse = networker.stdResponseBody();
+		String htmlToParse = "";
+
+		do htmlToParse = getNetworkResponse(testUrl, cookie);
+		while(htmlToParse.equals("503"));
 
 		//<title>Begin:
 		char[] htmlChars = htmlToParse.toCharArray();
@@ -289,7 +315,7 @@ public class BlackboardRetriever extends Retriever{
 		if(firstStop == -1){
 			System.out.println("Failed TEST type -- reattempting");
 			//return new Assignment("No Name (503?)", "No Due (503?)");
-			return parseTest(networker,subjectID,contentID);
+			return parseTest(subjectID,contentID,cookie);
 		}
 
 		for(int i=0;i<linesFound.length;i++)
@@ -328,12 +354,9 @@ public class BlackboardRetriever extends Retriever{
 		return new Assignment("Unknown *unsupported name*", "Unknown Due");
 	}
 
-	private LinkedList<String> getAllClassIDs() throws URISyntaxException, IOException, InterruptedException {
-		String nextUrl = "https://blackboard.sc.edu/learn/api/v1/users/_1710804_1/memberships?expand=course.effectiveAvailability,course.permissions,courseRole&includeCount=true&limit=10000";
-		net.buildCookieRequest(nextUrl);
-		long time = System.currentTimeMillis();
-		String jsonToParse = net.stdResponseBody();
-		time = System.currentTimeMillis() - time;
+	/*private static String streamToString(InputStream istream){
+		long time3 = System.currentTimeMillis();
+		StringBuilder builder = new StringBuilder();
 
 		/*try{
 			HttpsURLConnection test = (HttpsURLConnection) (new URL(nextUrl)).openConnection();
@@ -345,16 +368,42 @@ public class BlackboardRetriever extends Retriever{
 			System.out.println(testJson);
 		} catch (Exception e){
 			e.printStackTrace();
-		}*/
+		}
 
+		time3 = System.currentTimeMillis() - time3;
+		return builder.toString();
+	}*/
+
+	private LinkedList<String> getClassIDs() throws IOException {
+		final String apiReqUrl = "https://blackboard.sc.edu/learn/api/v1/users/_1710804_1/memberships?expand=course.effectiveAvailability,course.permissions,courseRole&includeCount=true&limit=10000";
+
+		String apiResponseJson = "";
+		boolean cookieFail = true;
+		do {
+			apiResponseJson = getNetworkResponse(apiReqUrl, this.cookie);
+
+			if (cookieFail = apiResponseJson.equals("401")) {
+				System.out.println("[Cookie Failed/Expired] --retrying w new cookie");
+
+//				net.setCookie(null);
+				this.cookie = getCookieViaLogin();
+			}
+
+		} while(cookieFail);
+
+		/*String nextUrl = "https://blackboard.sc.edu/learn/api/v1/users/_1710804_1/memberships?expand=course.effectiveAvailability,course.permissions,courseRole&includeCount=true&limit=10000";
+		net.buildCookieRequest(nextUrl);
+		long time = System.currentTimeMillis();
+		String jsonToParse = net.stdResponseBody();
+		time = System.currentTimeMillis() - time;
 		if(jsonToParse.startsWith("{\"status\":401,\"message\":\"API request is not authenticated.\"}")){
 			System.out.println("[Cookie Failed] --retrying login with no cookie");
 			net.setCookie(null);
-			login(false);
-			return getAllClassIDs();
-		}
+			getCookieViaLogin();
+			return getClassIDs();
+		}*/
 
-		LinkedList<String> classLines = splitJson(jsonToParse);
+		LinkedList<String> classLines = splitJson(apiResponseJson);
 		classLines.removeIf(classLine -> !classLine.contains(getTermName()));
 
 		LinkedList<String> classIDs = new LinkedList<>();
@@ -364,6 +413,17 @@ public class BlackboardRetriever extends Retriever{
 		}
 
 		return classIDs;
+		/*try{
+			HttpsURLConnection test = (HttpsURLConnection) (new URL(nextUrl)).openConnection();
+			test.addRequestProperty("cookie", net.getCookie());
+			test.connect();
+			long time2 = System.currentTimeMillis();
+			String testJson = new BufferedReader(new InputStreamReader(test.getInputStream())).lines().collect(Collectors.joining("\n"));
+			time2 = System.currentTimeMillis() - time2;
+			System.out.println(testJson);
+		} catch (Exception e){
+			e.printStackTrace();
+		}*/
 	}
 
 	private LinkedList<String> splitJson(String json) {
@@ -405,42 +465,109 @@ public class BlackboardRetriever extends Retriever{
 		return null;
 	}
 
+	private static String getNetworkResponse(String url) throws IOException {
+		long time = System.currentTimeMillis();
+
+		HttpsURLConnection connection = (HttpsURLConnection) (new URL(url)).openConnection();
+		connection.setDoOutput(true);
+
+		String response = streamToString(connection.getInputStream());
+
+		updateCounter(System.currentTimeMillis() - time);
+
+		return response;
+	}
+
+	private static String streamToString(InputStream istream){
+		return new BufferedReader(new InputStreamReader(istream)).lines().collect(Collectors.joining("\n"));
+	}
+
+	//uses cookie param to allow static access and keep thread safe. could b changed to an instance method tho
+	private static String getNetworkResponse(String url, String cookie) throws IOException {
+		long time = System.currentTimeMillis();
+
+		HttpsURLConnection connection = (HttpsURLConnection) (new URL(url)).openConnection();
+
+		connection.setRequestMethod("GET");
+		connection.addRequestProperty("Cookie", cookie);
+		connection.setDoOutput(true);
+		connection.connect();
+
+		if(connection.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+			updateCounter(System.currentTimeMillis() - time);
+			System.out.println("401!!!");
+			return "401";
+		} else if(connection.getResponseCode() == HttpURLConnection.HTTP_UNAVAILABLE) {
+			System.out.println("503!!!");
+			return "503";
+		} else {
+			String response = streamToString(connection.getInputStream());
+
+			updateCounter(System.currentTimeMillis() - time);
+
+			return response;
+		}
+
+	}
+
+	private static String cookiesThruPost(String exec) throws IOException {
+		long time = System.currentTimeMillis();
+		final String loginPostReqUrl = "https://cas.auth.sc.edu/cas/login";
+
+		HttpsURLConnection postRequest = (HttpsURLConnection) (new URL(loginPostReqUrl)).openConnection();
+		postRequest.setRequestMethod("POST");
+		postRequest.addRequestProperty("Content-type", "application/x-www-form-urlencoded");
+		postRequest.setDoOutput(true);
+
+		String loginPOSTbody = "username=" + USER + "&password=" + PASS + "&execution=" + exec + "&_eventId=submit&geolocation=";
+
+		OutputStream ostream = postRequest.getOutputStream();
+		ostream.write(loginPOSTbody.getBytes(StandardCharsets.UTF_8));
+		ostream.flush();
+		ostream.close();
+
+		List<String> cookies = postRequest.getHeaderFields().get("Set-Cookie");
+		StringBuilder builder = new StringBuilder();
+		for(String cookie : cookies)
+			builder.append(cookie).append(";");
+
+		time = System.currentTimeMillis() - time;
+		return builder.toString();
+
+		/*long time = System.currentTimeMillis();
+		String LoginPOSTbody = "username=" + USER + "&password=" + PASS + "&execution=" + exec + "&_eventId=submit&geolocation=";
+		net.setRequest(net.stdRequestBuilder(loginPostReqUrl).header("Content-Type","application/x-www-form-urlencoded").POST(HttpRequest.BodyPublishers.ofString(LoginPOSTbody)).build());
+
+
+		LinkedList<String> cookies = new LinkedList<>(net.stdResponse().headers().allValues("set-cookie"));
+
+		time = System.currentTimeMillis() - time;
+		return cookies.get(0) + ";" + cookies.get(1) + ";" + cookies.get(2);*/
+
+	}
+
 	private void saveCookieToCache(String cookie) throws FileNotFoundException {
 		PrintWriter cacher = new PrintWriter(cookieCache);
 		cacher.println(cookie);
 		cacher.close();
 	}
 
-	protected void login(boolean useCookie) throws URISyntaxException, IOException, InterruptedException {
+	protected String getCookieViaLogin() throws IOException {
 		long time = System.currentTimeMillis();
 
-		if(useCookie) {
-			String cookieAttempt = getCookieFromCache();
-			if (cookieAttempt != null) {
-				System.out.println("[Using Cookie]");
-				net.setCookie(cookieAttempt);
-				time = System.currentTimeMillis() - time;
-				return;
-			}
-		}
+		String loginPageHTML;
+		final String loginUrl = "https://cas.auth.sc.edu/cas/login?service=https%3A%2F%2Fblackboard.sc.edu%2Fwebapps%2Fbb-auth-provider-cas-BB5dd6acf5e22a7%2Fexecute%2FcasLogin%3Fcmd%3Dlogin%26authProviderId%3D_132_1%26redirectUrl%3Dhttps%253A%252F%252Fblackboard.sc.edu%252Fultra%26globalLogoutEnabled%3Dtrue";
 
 		System.out.println("[Without Cookie]");
-		String nextUrl = "https://cas.auth.sc.edu/cas/login?service=https%3A%2F%2Fblackboard.sc.edu%2Fwebapps%2Fbb-auth-provider-cas-BB5dd6acf5e22a7%2Fexecute%2FcasLogin%3Fcmd%3Dlogin%26authProviderId%3D_132_1%26redirectUrl%3Dhttps%253A%252F%252Fblackboard.sc.edu%252Fultra%26globalLogoutEnabled%3Dtrue";
-		net.buildStdRequest(nextUrl);
+		loginPageHTML = getNetworkResponse(loginUrl);
 
-		String exec = extractValue(net.stdResponseBody(),"execution", "(?<=name=\"execution\" value=\")[^\"]*", "Extract Exec");
+		String exec = extractValue(loginPageHTML,"execution", "(?<=name=\"execution\" value=\")[^\"]*", "Extract Exec");
+		String cookie = cookiesThruPost(exec);
 
-		nextUrl = "https://cas.auth.sc.edu/cas/login";
-		String LoginPOSTbody = "username=" + USER + "&password=" + PASS + "&execution=" + exec + "&_eventId=submit&geolocation=";
-		net.setRequest(net.stdRequestBuilder(nextUrl).header("Content-Type","application/x-www-form-urlencoded").POST(HttpRequest.BodyPublishers.ofString(LoginPOSTbody)).build());
-
-		LinkedList<String> cookies = new LinkedList<>(net.stdResponse().headers().allValues("set-cookie"));
-
-		String cookie = cookies.get(0) + ";" + cookies.get(1) + ";" + cookies.get(2);
-		net.setCookie(cookie);
 		saveCookieToCache(cookie);
-
 		time = System.currentTimeMillis() - time;
+
+		return cookie;
 	}
 
 	private String extractAssnsLink(String toParse, final String REGEX, String name, String... matchContains){
