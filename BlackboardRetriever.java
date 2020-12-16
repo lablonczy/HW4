@@ -335,7 +335,7 @@ public class BlackboardRetriever extends Retriever{
 		String jsonToParse = net.stdResponseBody();
 		time = System.currentTimeMillis() - time;
 
-		try{
+		/*try{
 			HttpsURLConnection test = (HttpsURLConnection) (new URL(nextUrl)).openConnection();
 			test.addRequestProperty("cookie", net.getCookie());
 			test.connect();
@@ -345,7 +345,7 @@ public class BlackboardRetriever extends Retriever{
 			System.out.println(testJson);
 		} catch (Exception e){
 			e.printStackTrace();
-		}
+		}*/
 
 		if(jsonToParse.startsWith("{\"status\":401,\"message\":\"API request is not authenticated.\"}")){
 			System.out.println("[Cookie Failed] --retrying login with no cookie");
