@@ -22,9 +22,8 @@ public class Driver {
 
 			BlackboardRetriever bb = new BlackboardRetriever();
 			assns = bb.retrieve();
-			bbTime = (System.currentTimeMillis() - bbTime);
 
-			//assns.forEach( (assn) -> System.out.println((assn.getDue().toUpperCase().contains(month)?"\n~~~~~~~~~~~ " + assn + "\n":assn)));
+			bbTime = (System.currentTimeMillis() - bbTime);
 
 			Collections.sort(assns);
 			assns.forEach(System.out::println);
