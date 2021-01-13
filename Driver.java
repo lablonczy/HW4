@@ -18,6 +18,7 @@ public class Driver {
 
 		LinkedList<Assignment> assns;
 		try {
+
 			long bbTime = System.currentTimeMillis();
 
 			BlackboardRetriever bb = new BlackboardRetriever();
@@ -25,7 +26,6 @@ public class Driver {
 
 			bbTime = (System.currentTimeMillis() - bbTime);
 
-			Collections.sort(assns);
 			assns.forEach(System.out::println);
 
 			System.out.println("found " + assns.size() + " blackboard assns in " + bbTime + "ms with " + BlackboardRetriever.reqs +" requests and " + BlackboardRetriever.avgReqTime / BlackboardRetriever.reqs + " ms per req");

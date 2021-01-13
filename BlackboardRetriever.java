@@ -1,4 +1,7 @@
+import netscape.javascript.JSObject;
+
 import javax.net.ssl.HttpsURLConnection;
+import javax.swing.text.html.parser.Entity;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
@@ -11,14 +14,14 @@ import java.util.stream.Collectors;
 
 public class BlackboardRetriever extends Retriever{
 
-	File cookieCache/*, classCache*/;
+	File cookieCache;
 	private static final String PATH_CACHE_COOKIE = "cookies.txt";
-//	private static final String PATH_CACHE_CLASSES = "ClassCache.txt";
 	private String cookie;
 	public static long avgReqTime;
 	public static int reqs;
 
 	public BlackboardRetriever() throws IOException {
+		long time = System.currentTimeMillis();
 		reqs = 0;
 		avgReqTime = 0;
 
@@ -26,13 +29,20 @@ public class BlackboardRetriever extends Retriever{
 		if(!cookieCache.exists())
 			cookieCache.createNewFile();
 
+		time = System.currentTimeMillis() - time;
+		System.out.println("----------------Constructor time: " + time);
+
 	}
 
 	public LinkedList<Assignment> retrieve() throws InterruptedException, IOException, URISyntaxException {
+		long time = System.currentTimeMillis();
+
 		handleCookie();
-		LinkedList<Assignment> assns = getAssns(getClassIDs());
+		LinkedList<Assignment> assns = getAssns(getClassDetails());
 		Collections.sort(assns);
 
+		time = System.currentTimeMillis() - time;
+		System.out.println("-------------Retrieve Time: " + time);
 		return assns;
 	}
 
@@ -48,7 +58,7 @@ public class BlackboardRetriever extends Retriever{
 		long time = System.currentTimeMillis();
 
 		String cookieAttempt = (cookie = getCookieFromCache());
-		if (cookieAttempt != null)
+		if (cookieAttempt != null && cookieValid(cookieAttempt))
 			System.out.println("[Using Cookie]");
 		else
 			cookie = getCookieViaLogin();
@@ -57,7 +67,30 @@ public class BlackboardRetriever extends Retriever{
 		System.out.println("handleCookie Time: " + time);
 	}
 
-	private LinkedList<Assignment> getAssns(LinkedList<String> classIds) throws InterruptedException {
+	private LinkedList<Assignment> getAssns(HashMap<String, String> classDeets) throws InterruptedException {
+		long time = System.currentTimeMillis();
+
+		LinkedList<Assignment> assns = new LinkedList<>();
+		ClassThread[] threads = new ClassThread[classDeets.size()];
+
+		Set<Map.Entry<String, String>> detailSet = classDeets.entrySet();
+
+		int i=0;
+		for(Iterator<Map.Entry<String,String>> idsIterator = detailSet.iterator(); idsIterator.hasNext(); i++){
+			Map.Entry<String,String> current = idsIterator.next();
+			threads[i] = new ClassThread(assns, current.getKey(), current.getValue(), this.cookie);
+			threads[i].start();
+		}
+
+		for(ClassThread thread : threads)
+			thread.join();
+
+		time = System.currentTimeMillis() - time;
+		System.out.println("--------------getAssnsOuter Time: " + time);
+		return assns;
+	}
+
+	/*private LinkedList<Assignment> getAssns(LinkedList<String> classIds) throws InterruptedException {
 		long time = System.currentTimeMillis();
 
 		LinkedList<Assignment> assns = new LinkedList<>();
@@ -73,294 +106,106 @@ public class BlackboardRetriever extends Retriever{
 			thread.join();
 
 		time = System.currentTimeMillis() - time;
-		System.out.println("getAssnsOuter Time: " + time);
+		System.out.println("--------------getAssnsOuter Time: " + time);
 		return assns;
-	}
+	}*/
 
 	private class ClassThread extends Thread {
-		String id, cookie;
+		String id, cookie, className;
 		LinkedList<Assignment> assns;
 
-		public ClassThread(LinkedList<Assignment> assns, String id, String cookie) {
+		public ClassThread(LinkedList<Assignment> assns, String id, String className, String cookie) {
 			this.id = id;
 			this.assns = assns;
 			this.cookie = cookie;
+			this.className = className;
 		}
 
 		public void run() {
 			try {
-				String classPageUrl = "https://blackboard.sc.edu/webapps/blackboard/execute/modulepage/view?course_id=" + id + "&cmp_tab_id=_564695_1&mode=view";
-				String classHtml = getNetworkResponse(classPageUrl, cookie);
-	
-				if(classHtml.contains("Assignments")){
-	
-					String link = "https://blackboard.sc.edu" + extractAssnsLink(classHtml, "/webapps/blackboard/content/listContent.jsp\\?course_id=" + id + "&content_id=[^&]+&mode=reset(?=[\\s\\S]{0,100}Assignments)", "Link To Assns Page", "/webapps/blackboard/content/listContent.jsp?course_id=" + id, "&mode=reset");
-					assns.addAll(getAssns(id, link, cookie));
-	
-				}
+
+				String classAssnsApiUrl = "https://blackboard.sc.edu/learn/api/public/v2/courses/" + id + "/gradebook/columns?fields=name,grading.due";
+				String apiResponseJson = getNetworkResponse(classAssnsApiUrl, this.cookie);
+
+				LinkedList<Assignment> jsonAssns = getClassValuesFromJson(apiResponseJson);
+				jsonAssns.removeIf(assn -> assn.getName().equals("Total") || assn.getName().equals("Weighted Total"));
+
+				for(Assignment found : jsonAssns)
+					found.setClassName(className);
+
+				assns.addAll(jsonAssns);
 
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
-	
-	private class AssnsThread extends Thread {
-		
-		LinkedList<Assignment> assns;
-		String type, subjectID, contentID, responseHTML, cookie;
 
-		public AssnsThread(LinkedList<Assignment> assns, String type, String subjectID, String contentID, String responseHTML, String cookie) {
-			this.assns = assns;
-			this.type = type;
-			this.subjectID = subjectID;
-			this.contentID = contentID;
-			this.responseHTML = responseHTML;
-			this.cookie = cookie;
-		}
-		
-		public void run() {
-			try {
-				switch (type) {
-					case "Assignment": assns.add(parseAssn(subjectID, contentID, cookie)); break;
-					case "Test" : assns.add(parseTest(subjectID, contentID, cookie)); break;
-					case "Content Folder" : assns.addAll(getAssns(subjectID, "https://blackboard.sc.edu" + fetchValue(responseHTML, "/webapps/blackboard/content/listContent.jsp\\?course_id=\\S{0,15}&content_id=" + contentID), cookie)); break; //todo add link
-					case "McGraw-Hill Assignment Dynamic": assns.add(parseMGH(contentID, responseHTML)); break;
-					case "Survey": assns.add(parseSurvery(subjectID)); break;
-					default: parseOther(type);
-				}
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-		}
-		
-	}
-
-	private LinkedList<Assignment> getAssns(String subjectID, String link, String cookie) throws IOException, InterruptedException {
+	private LinkedList<Assignment> getClassValuesFromJson(String apiResponseJson) {
 		long time = System.currentTimeMillis();
 
-		/*networker.buildCookieRequest(link);
-		String responseHTML = networker.stdResponseBody();*/
-
-		String responseHTML = getNetworkResponse(link, cookie);
-		long time1 = (System.currentTimeMillis() - time);
-
 		LinkedList<Assignment> assns = new LinkedList<>();
+		char[] htmlAsArray = apiResponseJson.toCharArray();
+		boolean quoteFound = false;
+		String find = "", lastFound = "";
+		StringBuilder builder = new StringBuilder();
 
-		//content types from clearfix liItem read
-		LinkedList<String> contentTypes = extractValues(responseHTML, "clearfix liItem read", "(?<=<li[\\s\\S]{0,100}img alt=\")[^\"]+(?=\" src=\")", "Assn Page Content Types");
-		//content ids from item clearfix
-		LinkedList<String> contentIDs = extractValues(responseHTML, "item clearfix", "(?<=<li[\\s\\S]{0,100}img alt=\")[^\"]+(?=\" src=\")", "Content IDs");
+		for(char currentChar : htmlAsArray){
 
-		int idsLength = contentIDs.size(), typesLength = contentTypes.size();
-		if(idsLength == 0 || typesLength == 0) {
-			if(idsLength != typesLength)
-				System.out.println("Uneven content and id length");
-			return assns;
+			if(currentChar == '"') {
+				if(quoteFound){
+					find = builder.toString();
+					if(lastFound.equals("name")){
+						assns.add(new Assignment(find));
+					} else if (lastFound.equals("due")){
+						assns.getLast().setDue(find);
+					}
+
+					lastFound = find;
+					builder.setLength(0);
+				}
+
+				quoteFound = !quoteFound;
+			} else if(quoteFound)
+				builder.append(currentChar);
 		}
 
-		AssnsThread[] threads = new AssnsThread[idsLength];
-
-		int i=0;
-		for(Iterator<String> idIterator = contentIDs.iterator(), typesIterator = contentTypes.iterator(); idIterator.hasNext() && typesIterator.hasNext();i++) {
-			String contentID = idIterator.next();
-			String type = typesIterator.next();
-
-			/*switch (type) {
-				case "Assignment": assns.add(parseAssn(subjectID, contentID)); break;
-				case "Test" : assns.add(parseTest(subjectID, contentID)); break;
-				case "Content Folder" : assns.addAll(getAssns(subjectID, "https://blackboard.sc.edu" + fetchValue(responseHTML, "/webapps/blackboard/content/listContent.jsp\\?course_id=\\S{0,15}&content_id=" + contentID), net)); break; //todo add link
-				case "McGraw-Hill Assignment Dynamic": assns.add(parseMGH(contentID, responseHTML)); break;
-				case "Survey": assns.add(parseSurvery(subjectID)); break;
-				default: parseOther(type);
-			}*/
-			threads[i] = new AssnsThread(assns, type, subjectID, contentID, responseHTML, cookie);
-			threads[i].start();
-		}
-
-		for(AssnsThread thread : threads)
-			thread.join();
-
-		System.out.println("getAssnsInner Can Save: " + ((System.currentTimeMillis() - time) - time1));
+		time = System.currentTimeMillis() - time;
 		return assns;
 	}
 
-	private Assignment parseMGH(String contentID, String toParse)  {
-//		LinkedList<String> values = fetchValues(toParse, "(?<=" + contentID + "\" ><span style=\"color:#000000;\">)[^<]+|(?<=Due Date: )[^<]+(?=[\\s\\S]{0,200}id=\"" + contentID + ")");
-
-		String assnSubsection = extractTag(toParse, ("li id=\"contentListItem:" + contentID + "\"\tclass=\"clearfix liItem read\""), "li");
-
-		String name = extractTag(assnSubsection, "span style=\"color:#000000;\"", "span");
-		String due = extractTag(assnSubsection, "i", "i");
-		due = due.substring(due.indexOf(":") + 2);
-
-		return new Assignment(name, due);
-
-//		return null;
-	}
-
-	private Assignment getAssn(String toParse){
-		String title = extractTag(toParse, "title", "title");
-		if(title.startsWith("Review Submission History:"))
-			return getAssnSubmitted(toParse);
-		else if(title.startsWith("Upload Assignment:"))
-			return getAssnNormal(toParse);
-		else {
-//			System.out.println("FAIL FAIL");
-			return null;
-		}
-
-	}
-
-	private Assignment getAssnNormal(String toParse){
-		//submitted assn values and shit but needs editing
-
-		String due = extractTag(toParse, "div class=\"metaField\" aria-describedby=\"assignMeta2\"", "div");
-		String name = extractTag(toParse, "span id=\"crumb_3\"", "span");
-
-		due = due.substring(0,due.indexOf("<")).trim() + " " + extractTag(due, "span class=\"metaSubInfo\"", "span").trim();
-		name = name.substring(name.indexOf(":") + 1).trim();
-		return new Assignment(name, due, false);
-	}
-
-	private Assignment getAssnSubmitted(String toParse){
-		String divContents = extractTag(toParse, "div class=\"attempt gradingPanelSection\"", "div");
-
-		char[] divChars = divContents.toCharArray();
-		String firstHalf = "", secondHalf = "";
-		StringBuilder builder = new StringBuilder();
-		int i;
-		for(i=0;i<divChars.length;i++){
-			builder.append(divChars[i]);
-			if(divChars[i] == '\n' && divChars[i+1] == '\n')
-				break;
-		}
-		firstHalf = builder.toString();
-		builder.setLength(0);
-		for(;i<divChars.length;i++){
-			builder.append(divChars[i]);
-		}
-		secondHalf = builder.toString();
-
-		firstHalf = extractTag(firstHalf, "p", "p");
-		secondHalf = extractTag(secondHalf, "p","p");
-
-		return new Assignment(firstHalf, secondHalf, true);
-	}
-
-	private Assignment parseAssn(String subjectID, String contentID, String cookie) throws IOException {
+	private HashMap<String, String> getClassDetails() throws IOException {
 		long time = System.currentTimeMillis();
-		String assnUrl = "https://blackboard.sc.edu/webapps/assignment/uploadAssignment?content_id=" + contentID + "&course_id=" + subjectID +"&group_id=&mode=view";
+		final String apiReqUrl = "https://blackboard.sc.edu/learn/api/v1/users/_1710804_1/memberships?expand=course.effectiveAvailability,course.permissions,courseRole&includeCount=true&limit=10000";
 
-		/*String assnHTML = getNetworkResponse(assnUrl, cookie);
-		Assignment assn = getAssn(assnHTML);
+		String apiResponseJson = "";
+		boolean cookieFail;
+		do {
+			apiResponseJson = getNetworkResponse(apiReqUrl, this.cookie);
 
-		if(assn == null) {
-			System.out.println("Failed ASSN type -- reattempt");
-			return parseAssn(subjectID, contentID, cookie);
-		}*/
-
-		String assnHTML = "";
-
-		do assnHTML = getNetworkResponse(assnUrl, cookie);
-		while (assnHTML.equals("503"));
-
-		Assignment assn = getAssn(assnHTML);
-
-		if(assn == null) {
-			System.out.println("Failed ASSN type -- reattempt");
-			return parseAssn(subjectID, contentID, cookie);
-		}
-
-		time = System.currentTimeMillis() - time;
-		return assn;
-	}
-
-	private Assignment parseTest(String subjectID, String contentID, String cookie) throws IOException {
-		long time = System.currentTimeMillis();
-
-		String testUrl = "https://blackboard.sc.edu/webapps/assessment/take/launchAssessment.jsp?content_id=" + contentID + "&course_id=" + subjectID +"&group_id=&mode=view";
-
-		String htmlToParse = "";
-
-		do htmlToParse = getNetworkResponse(testUrl, cookie);
-		while(htmlToParse.equals("503"));
-
-		//<title>Begin:
-		char[] htmlChars = htmlToParse.toCharArray();
-		char[] firstComparator = "Due Date".toCharArray();
-		int linesToGet = 10;
-		StringBuilder[] linesFound = new StringBuilder[linesToGet];
-		final int[] LINES_TO_PARSE = {5,9};
-		int[] findersLowerBounds = {"This Test is due on ".length(), "</li> Click <strong>Begin</strong> to start: ".length()};
-		char findersUpperBoundHelper = '.';
-		String[] values = new String[2];
-
-		int firstStop = -1;
-		firstloop:
-		for(int i=0;i<htmlChars.length;i++)
-			for(int j=0;j<firstComparator.length;j++) {
-				if(htmlChars[i + j] != firstComparator[j])
-					break;
-				else if(j==firstComparator.length-1) {
-					firstStop = i + j + 2;
-					break firstloop;
-				}
+			if (cookieFail = apiResponseJson.equals("401")) {
+				System.out.println("[Cookie Failed/Expired] --retrying w new cookie");
+				this.cookie = getCookieViaLogin();
 			}
 
-		if(firstStop == -1){
-			System.out.println("Failed TEST type -- reattempting");
-			//return new Assignment("No Name (503?)", "No Due (503?)");
-			return parseTest(subjectID,contentID,cookie);
-		}
+		} while(cookieFail);
 
-		for(int i=0;i<linesFound.length;i++)
-			linesFound[i] = new StringBuilder();
+		LinkedList<String> classLines = splitJson(apiResponseJson);
+		classLines.removeIf(classLine -> !classLine.contains(getTermName()));
 
-		char current = ' ';
-		for(int i=firstStop, line = 0;line < linesToGet;i++) {
-			current = htmlChars[i];
-			linesFound[line].append(current);
-			if(current == '\n')
-				line++;
-		}
-
-		for(int i=0, parsed=0;i<linesFound.length;i++)
-			if(i == LINES_TO_PARSE[parsed])
-				values[parsed++] = linesFound[i].toString();
-
-		for(int i=0;i<values.length;i++) {
-			String trimmed = values[i].trim();
-			values[i] = trimmed.substring(findersLowerBounds[i], trimmed.indexOf(findersUpperBoundHelper));
-		}
+		HashMap<String, String> classIDs = new HashMap<>();
+		for(String classLine : classLines)
+			classIDs.put(extractValue(classLine, "courseId", "(?<=homePageUrl\":\"/webapps/blackboard/execute/courseMain\\?course_id=)[^\"]+", "class value"), extractValue(classLine, "displayName", "(?<=displayName\":\")[^\"]+", "class name"));
 
 		time = System.currentTimeMillis() - time;
-		return new Assignment(values[1], values[0]);
+		System.out.println("----------------getClassIDs Time: " + time);
+		return classIDs;
+
 	}
 
-	private Assignment parseSurvery(String subjectID) {
-		//System.out.println("Survey");
-
-		return new Assignment("Unknown survey name", "Unknown Due");
-	}
-
-	private Assignment parseOther(String type){
-		//System.out.println(type);
-
-		return new Assignment("Unknown *unsupported name*", "Unknown Due");
-	}
-
-	private LinkedList<String> getClassIDs() throws IOException {
+	/*private LinkedList<String> getClassIDs() throws IOException {
 		long time = System.currentTimeMillis();
-		final String apiReqUrl2 = "https://blackboard.sc.edu/learn/api/v1/users/_1710804_1/memberships?expand=course.effectiveAvailability,course.permissions,courseRole&includeCount=true&limit=10000";
-
-		//https://prod.ally.ac/api/v1/1864/reports/courses/_1112670_1/content
-
-		//_1100167_1
-//		final String apiReqUrl = "https://blackboard.sc.edu/learn/api/v1/courses/_1100167_1/users";
-		final String apiReqUrl = "https://blackboard.sc.edu/learn/api/public/v1/courses/_1112670_1/gradebook/schemas";
+		final String apiReqUrl = "https://blackboard.sc.edu/learn/api/v1/users/_1710804_1/memberships?expand=course.effectiveAvailability,course.permissions,courseRole&includeCount=true&limit=10000";
 
 		String apiResponseJson = "";
 		boolean cookieFail;
@@ -378,16 +223,14 @@ public class BlackboardRetriever extends Retriever{
 		classLines.removeIf(classLine -> !classLine.contains(getTermName()));
 
 		LinkedList<String> classIDs = new LinkedList<>();
-		for(String classLine : classLines){
-			String homePageUrlLine = extractValue(classLine, "homePageUrl", "(?<=homePageUrl\":\"/webapps/blackboard/execute/courseMain\\?course_id=)[^\"]+", "Extract IDs");
-			classIDs.add(homePageUrlLine.substring(homePageUrlLine.indexOf("=") + 1));
-		}
+		for(String classLine : classLines)
+			classIDs.add(extractValue(classLine, "courseId", "(?<=homePageUrl\":\"/webapps/blackboard/execute/courseMain\\?course_id=)[^\"]+", "Extract IDs"));
 
 		time = System.currentTimeMillis() - time;
-		System.out.println("getClassIDs Time: " + time);
+		System.out.println("----------------getClassIDs Time: " + time);
 		return classIDs;
 
-	}
+	}*/
 
 	private LinkedList<String> splitJson(String json) {
 		long time = System.currentTimeMillis();
@@ -428,6 +271,21 @@ public class BlackboardRetriever extends Retriever{
 		return null;
 	}
 
+	private boolean cookieValid(String cookie){
+		String[] cookieParts = cookie.split(";");
+		final long TIME_OFFSET_MS = 10000;
+
+		for(String part : cookieParts)
+			if(part.startsWith("BbRouter=expires:")){
+				String expiration = part.substring(part.indexOf(":") + 1, part.indexOf(",") - 1);
+
+				if(System.currentTimeMillis() > (Long.parseLong(expiration)*1000 + TIME_OFFSET_MS))
+					return true;
+			}
+
+		return false;
+	}
+
 	private static String getNetworkResponse(String url) throws IOException {
 		long time = System.currentTimeMillis();
 
@@ -445,7 +303,6 @@ public class BlackboardRetriever extends Retriever{
 		return new BufferedReader(new InputStreamReader(istream)).lines().collect(Collectors.joining("\n"));
 	}
 
-	//uses cookie param to allow static access and keep thread safe. could b changed to an instance method tho
 	private static String getNetworkResponse(String url, String cookie) throws IOException {
 		long time = System.currentTimeMillis();
 
@@ -532,36 +389,6 @@ public class BlackboardRetriever extends Retriever{
 		time = System.currentTimeMillis() - time;
 
 		return cookie;
-	}
-
-	private String extractAssnsLink(String toParse, final String REGEX, String name, String... matchContains){
-		LinkedList<String> finds = new LinkedList<>();
-		char[] htmlAsArray = toParse.toCharArray();
-		boolean quoteFound = false;
-		String find = "";
-		StringBuilder builder = new StringBuilder();
-
-		for(char currentChar : htmlAsArray){
-			if(currentChar == '"') {
-				if(quoteFound){
-					find = builder.toString();
-					if(allContained(find, matchContains))
-						finds.add(find);
-
-					builder.setLength(0);
-				}
-
-				quoteFound = !quoteFound;
-			} else if(quoteFound)
-				builder.append(currentChar);
-		}
-
-		if(finds.get(1).equals("")){
-			doDebug(name + " resorted to regex");
-			return fetchValue(toParse, REGEX);
-		}
-
-		return finds.get(1);
 	}
 
 	private String getTermName(){

@@ -1,10 +1,22 @@
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Date;
+
 public class Assignment implements Comparable<Assignment> {
 
-	private String name, due;
+	private String name, due, className;
 	private long dueNum;
 	private static final String[] WEEKDAYS = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
 	private static final String[] MONTHS = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 	private boolean submitted;
+	private Instant dueInstant;
+
+	public Assignment(String name) {
+		setName(name);
+		setSubmitted(false);
+	}
 
 	public Assignment(String name, String due) {
 		setName(name);
@@ -22,13 +34,21 @@ public class Assignment implements Comparable<Assignment> {
 		return submitted;
 	}
 
+	public String getClassName() {
+		return className;
+	}
+
+	public void setClassName(String className) {
+		this.className = className;
+	}
+
 	public void setSubmitted(boolean submitted) {
 		this.submitted = submitted;
 	}
 
 	@Override
 	public String toString() {
-		return (submitted?"!! ":"") + due + " | " + name;
+		return (submitted?"!! ":"") + due + " | " + name + " | " + className;
 	}
 
 	public String getName() {
@@ -73,11 +93,21 @@ public class Assignment implements Comparable<Assignment> {
 			return due;
 	}
 
-	private String enforceFormat(String due) {
-		int firstSpace = due.indexOf(" ");
+	public Instant getDueInstant() {
+		return dueInstant;
+	}
 
-		if ((due.charAt(firstSpace) + 2) == ' ')
-			return due.substring(0, firstSpace) + "0" + due.substring(firstSpace + 2);
+	public void setDueInstant(Instant dueInstant) {
+		this.dueInstant = dueInstant;
+	}
+
+	private String enforceFormat(String due)  {
+		try {
+			this.dueInstant = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(due).toInstant().minus(Duration.ofHours(5));
+			return Date.from(dueInstant).toString();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 
 		return due;
 	}
@@ -117,20 +147,11 @@ public class Assignment implements Comparable<Assignment> {
 	}
 
 	public void setDue(String due) {
-		if (due.startsWith("Unknown"))
-			return;
-
-		for (int i = 0; i < WEEKDAYS.length; i++)
-			if (due.startsWith(WEEKDAYS[i]))
-				due = due.substring(due.indexOf(",") + 2);
-
-		due = reduceDue(due);
-
 		due = enforceFormat(due);
 
 		this.due = due;
 
-		setDueNum(due);
+//		setDueNum(due);
 	}
 
 	@Override
@@ -142,9 +163,9 @@ public class Assignment implements Comparable<Assignment> {
 
 		boolean thisSubmitted = this.isSubmitted(), otherSubmitted = assignment.isSubmitted();
 		if ((thisSubmitted && otherSubmitted) || (!thisSubmitted && !otherSubmitted)) {
-			if (this.getDueNum() >= assignment.getDueNum())
+			if (this.getDueInstant().compareTo(assignment.getDueInstant()) > 0)
 				return 1;
-			else if (this.getDueNum() < assignment.getDueNum())
+			else if (this.getDueInstant().compareTo(assignment.getDueInstant()) < 0)
 				return -1;
 			else
 				return 0;
