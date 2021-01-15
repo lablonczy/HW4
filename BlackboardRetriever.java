@@ -1,6 +1,7 @@
 import netscape.javascript.JSObject;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.swing.plaf.synth.SynthTextAreaUI;
 import javax.swing.text.html.parser.Entity;
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -276,13 +277,13 @@ public class BlackboardRetriever extends Retriever{
 
 	private boolean cookieValid(String cookie){
 		String[] cookieParts = cookie.split(";");
-		final long TIME_OFFSET_MS = 10000;
+		final long TIME_OFFSET_SECS = 10, TIME_OFFSET_ROUTER = 10000, TIME_CONVERSION_S_MS = 1000;
 
 		for(String part : cookieParts)
 			if(part.startsWith("BbRouter=expires:")){
 				String expiration = part.substring(part.indexOf(":") + 1, part.indexOf(",") - 1);
 
-				if(System.currentTimeMillis() > (Long.parseLong(expiration)*1000 + TIME_OFFSET_MS))
+				if(System.currentTimeMillis() + (TIME_OFFSET_SECS*TIME_CONVERSION_S_MS) < (Long.parseLong(expiration)*TIME_OFFSET_ROUTER ))
 					return true;
 			}
 
