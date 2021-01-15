@@ -194,8 +194,11 @@ public class BlackboardRetriever extends Retriever{
 		classLines.removeIf(classLine -> !classLine.contains(getTermName()));
 
 		HashMap<String, String> classIDs = new HashMap<>();
-		for(String classLine : classLines)
-			classIDs.put(extractValue(classLine, "courseId", "(?<=homePageUrl\":\"/webapps/blackboard/execute/courseMain\\?course_id=)[^\"]+", "class value"), extractValue(classLine, "displayName", "(?<=displayName\":\")[^\"]+", "class name"));
+
+		for(String classLine : classLines){
+			String homePageUrlLine = extractValue(classLine, "homePageUrl", "(?<=homePageUrl\":\"/webapps/blackboard/execute/courseMain\\?course_id=)[^\"]+", "Extract IDs");
+			classIDs.put(homePageUrlLine.substring(homePageUrlLine.indexOf("=") + 1),extractValue(classLine, "displayName", "(?<=displayName\":\")[^\"]+", "class name"));
+		}
 
 		time = System.currentTimeMillis() - time;
 		System.out.println("----------------getClassIDs Time: " + time);
